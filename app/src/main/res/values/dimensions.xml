@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="drinkCardRound">10dp</dimen>
+    <dimen name="drinkCardWidth">120dp</dimen>
+    <dimen name="drinkCardHeight">180dp</dimen>
+    <dimen name="cartItemWidth">180dp</dimen>
+    <dimen name="cartItemHeight">50dp</dimen>
+</resources>
