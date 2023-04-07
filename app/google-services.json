@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "296404500411",
+    "project_id": "bikinibottom-caffe",
+    "storage_bucket": "bikinibottom-caffe.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:296404500411:android:e8df191543610f89358e9e",
+        "android_client_info": {
+          "package_name": "com.example.bluemooncaffe"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "296404500411-35etur7vslbq9nt99nssr5hi43jvp9v5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA7wyd2s8EjVSeEyRlvE4x6e4cF5u4NRLI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "296404500411-35etur7vslbq9nt99nssr5hi43jvp9v5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
