@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Blue Moon Caffe</string>
+    <string name="main_screen">Main Screen button</string>
+    <string name="cart_screen">Cart Screen button</string>
+    <string name="addToCart">Add to cart button</string>
+    <string name="drinkImage">Image of a drink</string>
+    <string name="removeItem">Remove the item</string>
+    <string name="yourOrder">Your order</string>
+    <string name="total">Total </string>
+    <string name="submit">Submit order </string>
 </resources>
