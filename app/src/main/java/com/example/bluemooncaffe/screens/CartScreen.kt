@@ -18,8 +18,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.bluemooncaffe.composables.cartItemsList
 import com.example.bluemooncaffe.data.Order
+import com.example.bluemooncaffe.data.totalPrice
+import com.example.bluemooncaffe.navigation.Screen
 import com.example.bluemooncaffe.viewModels.CartViewModel
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 
 @Composable
 fun CartScreen(

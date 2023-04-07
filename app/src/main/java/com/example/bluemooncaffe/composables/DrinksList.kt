@@ -10,6 +10,7 @@ import androidx.compose.ui.unit.dp
 import com.example.bluemooncaffe.data.Product
 import com.example.bluemooncaffe.viewModels.MainViewModel
 import androidx.compose.foundation.lazy.items
+import org.koin.androidx.compose.get
 
 @Composable
 fun drinksList(
