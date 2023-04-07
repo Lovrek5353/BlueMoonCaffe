@@ -2,9 +2,6 @@ package com.example.bluemooncaffe.screens
 
 import com.example.bluemooncaffe.navigation.ScreenTab
 import com.example.bluemooncaffe.viewModels.OrdersViewModel
-
-package com.example.bikinibottomcaffe.screens
-
 import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.layout.*

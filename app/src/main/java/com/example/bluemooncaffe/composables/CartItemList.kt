@@ -7,6 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.bluemooncaffe.data.Product
 import com.example.bluemooncaffe.viewModels.CartViewModel
+import org.koin.androidx.compose.get
 
 @Composable
 fun cartItemsList(

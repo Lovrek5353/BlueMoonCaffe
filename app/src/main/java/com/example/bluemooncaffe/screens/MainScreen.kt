@@ -1,8 +1,8 @@
 package com.example.bluemooncaffe.screens
 
-package com.example.bikinibottomcaffe.screens
-
-
+import com.example.bluemooncaffe.composables.drinksList
+import com.example.bluemooncaffe.navigation.Screen
+import com.example.bluemooncaffe.viewModels.MainViewModel
 import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.layout.*
@@ -19,10 +19,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.bikinibottomcaffe.composables.drinksList
-import com.example.bikinibottomcaffe.data.drinks
-import com.example.bikinibottomcaffe.navigation.Screen
-import com.example.bikinibottomcaffe.viewModels.MainViewModel
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable

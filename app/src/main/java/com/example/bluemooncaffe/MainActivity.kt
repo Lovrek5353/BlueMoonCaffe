@@ -10,6 +10,8 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.bluemooncaffe.navigation.Navigation
+import com.example.bluemooncaffe.navigation.Screen
 import com.example.bluemooncaffe.ui.theme.BlueMoonCaffeTheme
 
 class MainActivity : ComponentActivity() {
@@ -22,7 +24,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    //Loading first screen to come up
+                    Navigation(startRoute = Screen.StartScreen.route)
                 }
             }
         }
