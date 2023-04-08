@@ -8,11 +8,14 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.bluemooncaffe.navigation.Navigation
 import com.example.bluemooncaffe.navigation.Screen
 import com.example.bluemooncaffe.ui.theme.BlueMoonCaffeTheme
+import com.example.bluemooncaffe.utils.ConnectionState
+import com.example.bluemooncaffe.utils.connectivityState
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,7 +27,14 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    Navigation(startRoute = Screen.StartScreen.route)
+                    val connection by connectivityState()
+                    var isConnected= connection == ConnectionState.Available
+                    if(isConnected){
+                        Navigation(startRoute = Screen.StartScreen.route)
+                    }
+                    else{
+                        Navigation(startRoute = Screen.OfflineScreen.route)
+                    }
                 }
             }
         }
