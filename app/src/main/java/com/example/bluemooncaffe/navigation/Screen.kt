@@ -6,6 +6,7 @@ sealed class Screen(val route: String){
     object LoginScreen: Screen("login")
     object OrdersScreen: Screen("orders")
     object StartScreen: Screen("start")
+    object OfflineScreen: Screen("offline")
 }
 
 open class ScreenTab() {
