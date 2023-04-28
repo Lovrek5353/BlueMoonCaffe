@@ -1,5 +1,6 @@
 package com.example.bluemooncaffe.screens
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -14,6 +15,7 @@ import androidx.navigation.NavController
 import com.example.bluemooncaffe.navigation.Screen
 import com.example.bluemooncaffe.viewModels.LoginViewModel
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun StartScreen(
     navController: NavController,
