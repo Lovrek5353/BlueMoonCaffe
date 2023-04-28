@@ -1,5 +1,7 @@
 package com.example.bluemooncaffe.data
 
+import com.google.firebase.Timestamp
+
 class OrderManagement {
     var order = Order()
 
@@ -11,6 +13,10 @@ class OrderManagement {
         order.products.add(drink)
     }
 
+    fun setOrderID(id: Int){
+        order.id=id
+    }
+
     fun removeDrink(drink: Product){
         order.products.remove(drink)
     }
@@ -20,5 +26,8 @@ class OrderManagement {
     }
     fun setTableNumber(tableNumber: Int){
         order.tableNumber=tableNumber
+    }
+    fun setTimeStamp(time: Timestamp){
+        order.timestamp=time
     }
 }

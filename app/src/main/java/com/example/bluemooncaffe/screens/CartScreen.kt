@@ -1,5 +1,6 @@
 package com.example.bluemooncaffe.screens
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
@@ -25,6 +26,10 @@ import com.example.bluemooncaffe.navigation.Screen
 import com.example.bluemooncaffe.viewModels.CartViewModel
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import com.google.firebase.Timestamp
+
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
+
 
 @Composable
 fun CartScreen(
@@ -32,10 +37,12 @@ fun CartScreen(
     viewModel: CartViewModel
 ){
     val scaffoldState: ScaffoldState = rememberScaffoldState()
+    val orderId=viewModel.getOrderId().collectAsState(initial = 0).value
     var order by remember { mutableStateOf(Order()) }
     val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = false)
     var refreshing by remember { mutableStateOf(false) }
     var total by remember { mutableStateOf(0.0) }
+
 
     LaunchedEffect(Unit) {
         viewModel.getOrder().collect {
@@ -119,7 +126,9 @@ fun CartScreen(
                     Spacer(modifier = Modifier.height(10.dp))
                     Button(
                         onClick = {
+                            viewModel.setOrderTimeStamp(Timestamp.now())
                             order.totalPrice=total
+                            viewModel.setOrderId(orderId)
                             viewModel.addOrder(order) },
                     ) {
                         Text(text = stringResource(id = R.string.submit))

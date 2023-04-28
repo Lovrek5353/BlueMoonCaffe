@@ -18,12 +18,13 @@ import androidx.compose.ui.unit.sp
 import com.example.bluemooncaffe.data.Order
 import com.example.bluemooncaffe.data.getStatus
 import com.example.bluemooncaffe.viewModels.CartViewModel
+import com.example.bluemooncaffe.viewModels.OrdersViewModel
 
 @Composable
 fun OrderTrack(
     modifier: Modifier = Modifier,
     order: Order,
-    viewModel: CartViewModel
+    viewModel: OrdersViewModel
 ){
     Card(
         modifier = modifier.clip(RoundedCornerShape(30.dp)),

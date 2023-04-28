@@ -22,7 +22,7 @@ import androidx.navigation.NavController
 import com.example.bluemooncaffe.composables.OrderTrack
 import com.example.bluemooncaffe.data.Order
 import com.example.bluemooncaffe.navigation.Screen
-import com.example.bluemooncaffe.viewModels.CartViewModel
+import com.example.bluemooncaffe.viewModels.OrdersViewModel
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 
@@ -30,7 +30,7 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 @Composable
 fun OrderTrackScreen(
     navController: NavController,
-    viewModel: CartViewModel
+    viewModel: OrdersViewModel
 ){
     val scaffoldState: ScaffoldState = rememberScaffoldState()
     var order by remember { mutableStateOf(Order()) }

@@ -44,5 +44,14 @@ fun Navigation(startRoute: String){
         composable(Screen.OfflineScreen.route){
             OfflineScreen()
         }
+        composable(Screen.MyOrdersScreen.route){
+            MyOrdersScreen(navController = navController, viewModel = OrdersViewModel(get()))
+        }
+        composable(Screen.AllOrdersScreen.route){
+            AllOrdersScreen(navController = navController, viewModel = OrdersViewModel(get()) )
+        }
+        composable(Screen.OrderTrackScreen.route){
+            OrderTrackScreen(navController = navController, viewModel = OrdersViewModel(get()))
+        }
     }
 }

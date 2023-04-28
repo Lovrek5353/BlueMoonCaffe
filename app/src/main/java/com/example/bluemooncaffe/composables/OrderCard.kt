@@ -1,9 +1,6 @@
 package com.example.bluemooncaffe.composables
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
@@ -21,6 +18,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.bluemooncaffe.data.Order
+import com.example.bluemooncaffe.data.getDate
 import com.example.bluemooncaffe.data.getStatus
 import com.example.bluemooncaffe.viewModels.OrdersViewModel
 
@@ -37,7 +35,9 @@ fun OrderCard(
     )
     {
         LazyColumn(
-            modifier = modifier.clip(RoundedCornerShape(30.dp))
+            modifier = modifier
+                .clip(RoundedCornerShape(30.dp))
+                .height(200.dp)
         ) {
             item {
                 Row {
@@ -59,6 +59,8 @@ fun OrderCard(
                     )
                 }
             }
+
+
             for(product in order.products){
                 item {
                     Row(
@@ -78,6 +80,10 @@ fun OrderCard(
                         )
                     }
                 }
+            }
+            item{
+                var time: String? = order.timestamp?.let { getDate(it) }
+                Text("Text: "+ time)
             }
             item {
                 Row(

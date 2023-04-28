@@ -42,18 +42,18 @@ val drink5= Product(
 val drinks : MutableList<Product> = mutableListOf(drink1, drink2, drink3, drink4, drink5)
 
 val order1=Order(
-    id=1000,
+    id =1000,
     products = drinks,
-    status=1,
+    status =1,
     totalPrice = 6.0,
     tableNumber = 10,
     waiterId = 5
 )
 
 val order2=Order(
-    id=10001,
+    id =10001,
     products = drinks,
-    status=1,
+    status =1,
     totalPrice = 6.0,
     tableNumber = 10,
     waiterId = 5

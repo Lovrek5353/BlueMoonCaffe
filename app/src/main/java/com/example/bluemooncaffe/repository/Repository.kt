@@ -1,8 +1,10 @@
 package com.example.bluemooncaffe.repository
 
+import android.util.Log
 import com.example.bluemooncaffe.data.Order
 import com.example.bluemooncaffe.data.OrderManagement
 import com.example.bluemooncaffe.data.Product
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
@@ -17,6 +19,8 @@ import kotlinx.coroutines.flow.*
 interface Repository {
     fun getAllProducts(): SharedFlow<List<Product>>
     fun getAllOrders(): SharedFlow<List<Order>>
+
+    fun getSingleOrder(): SharedFlow<Order>
 
     fun getLatestOrderId(): SharedFlow<Int>
 
@@ -35,6 +39,8 @@ interface Repository {
     fun removeDrink(drink: Product)
     fun resetOrder()
     fun setTableNumber(tableNumber: Int)
+    fun setOrderId(id: Int)
+    fun setTimeStamp(time: Timestamp)
 }
 internal class RepositoryImpl(
     private val orderManagement: OrderManagement
@@ -81,7 +87,9 @@ internal class RepositoryImpl(
         )
     private val allOrdersInitialFlow= callbackFlow<List<Order>> {
         val orderList= mutableListOf<Order>()
-        val registration= allOrdersRef.addSnapshotListener{result, exception ->
+        val registration= allOrdersRef
+            .orderBy("timestamp", Query.Direction.DESCENDING)
+            .addSnapshotListener{result, exception ->
             if(exception!=null){
                 close(exception)
             }
@@ -102,6 +110,7 @@ internal class RepositoryImpl(
             SharingStarted.WhileSubscribed(),
             replay=1
         )
+
     private val localOrderInitialFlow =
         flow{
             emit(orderManagement.fetchOrder())
@@ -114,7 +123,7 @@ internal class RepositoryImpl(
     private val ordersIdInitialFlow= callbackFlow<Int> {
         var latestId: Int = 0
         val registration=allOrdersRef
-            .orderBy(FieldPath.documentId(), Query.Direction.DESCENDING)
+            .orderBy("timestamp", Query.Direction.DESCENDING)
             .limit(1)
             .addSnapshotListener{ result, exception ->
                 if(exception!=null){
@@ -217,31 +226,147 @@ internal class RepositoryImpl(
     override fun getAllProducts(): SharedFlow<List<Product>> = allDrinks
     override fun getAllOrders(): SharedFlow<List<Order>> = allOrders
 
+    override fun getSingleOrder(): SharedFlow<Order> {
+            val singleOrderPublisher= MutableSharedFlow<Order>()
+            val singleOrderInitialFlow= callbackFlow<Order> {
+            var order: Order = Order()
+            val registration=allOrdersRef
+                .orderBy("timestamp", Query.Direction.DESCENDING)
+                .limit(1)
+                .addSnapshotListener{result, exception ->
+                    if(exception!= null){
+                        close(exception)
+                    }
+                    else{
+                        for(document in result!!){
+                            order=document.toObject(Order::class.java)
+                        }
+                        trySend(order).isSuccess
+                    }
+                }
+                awaitClose{
+                    registration.remove()
+                }
+        }
+                .shareIn(
+                    flowScope,
+                    SharingStarted.WhileSubscribed(),
+                    replay=1
+                )
+        val singleOrder=merge(
+            singleOrderPublisher,
+            singleOrderInitialFlow
+        )
+            .shareIn(
+                flowScope,
+                SharingStarted.WhileSubscribed(),
+                replay=1
+            )
+        return singleOrder
+    }
+
     override fun getJuices(): SharedFlow<List<Product>> = juices
 
 
-    override fun assignToMe(id: Int) {
-        val singleOrderRef=allOrdersRef.document(id.toString())
+    override fun assignToMe(id: Int) {   //change to actual waiterId
         val updates= hashMapOf(
+            "waiterId" to 50,
             "status" to 2
         )
-        singleOrderRef.update(updates as Map<String, Any>)
+        val tempref=allOrdersRef.document(id.toString())
+        val query=allOrdersRef.whereEqualTo("id", id).limit(1)
+        query.get().addOnCompleteListener{result ->
+            if(result.isSuccessful){
+                val snapshot= result.getResult()
+                for(documentSnapshot in snapshot!!.documents){
+                    val documentRef=documentSnapshot.reference
+                    documentRef.update(updates as Map<String, Any>)
+                }
+            }
+            else{
+                Log.d("Error", result.exception.toString())
+            }
+        }
     }
 
     override fun changeToProcessing(id: Int) {
-        TODO("Not yet implemented")
+        val updates= hashMapOf(
+            "status" to 3
+        )
+        val tempref=allOrdersRef.document(id.toString())
+        val query=allOrdersRef.whereEqualTo("id", id).limit(1)
+        query.get().addOnCompleteListener{result ->
+            if(result.isSuccessful){
+                val snapshot= result.getResult()
+                for(documentSnapshot in snapshot!!.documents){
+                    val documentRef=documentSnapshot.reference
+                    documentRef.update(updates as Map<String, Any>)
+                }
+            }
+            else{
+                Log.d("Error", result.exception.toString())
+            }
+        }
     }
 
     override fun changeToDelivered(id: Int) {
-        TODO("Not yet implemented")
+        val updates= hashMapOf(
+            "status" to 4
+        )
+        val tempref=allOrdersRef.document(id.toString())
+        val query=allOrdersRef.whereEqualTo("id", id).limit(1)
+        query.get().addOnCompleteListener{result ->
+            if(result.isSuccessful){
+                val snapshot= result.getResult()
+                for(documentSnapshot in snapshot!!.documents){
+                    val documentRef=documentSnapshot.reference
+                    documentRef.update(updates as Map<String, Any>)
+                }
+            }
+            else{
+                Log.d("Error", result.exception.toString())
+            }
+        }
     }
 
     override fun changeToPaid(id: Int) {
-        TODO("Not yet implemented")
+        val updates= hashMapOf(
+            "status" to 5
+        )
+        val tempref=allOrdersRef.document(id.toString())
+        val query=allOrdersRef.whereEqualTo("id", id).limit(1)
+        query.get().addOnCompleteListener{result ->
+            if(result.isSuccessful){
+                val snapshot= result.getResult()
+                for(documentSnapshot in snapshot!!.documents){
+                    val documentRef=documentSnapshot.reference
+                    documentRef.update(updates as Map<String, Any>)
+                }
+            }
+            else{
+                Log.d("Error", result.exception.toString())
+            }
+        }
     }
 
     override fun changeToCompleted(id: Int) {
-        TODO("Not yet implemented")
+        val updates= hashMapOf(
+            "status" to 6
+        )
+        val tempref=allOrdersRef.document(id.toString())
+        val query=allOrdersRef.whereEqualTo("id", id).limit(1)
+        query.get().addOnCompleteListener{result ->
+            if(result.isSuccessful){
+                val snapshot= result.getResult()
+                for(documentSnapshot in snapshot!!.documents){
+                    val documentRef=documentSnapshot.reference
+                    documentRef.update(updates as Map<String, Any>)
+                }
+            }
+            else{
+                Log.d("Error", result.exception.toString())
+            }
+        }
     }
 
     override fun fetchOrder(): SharedFlow<Order> = localOrder
@@ -262,5 +387,12 @@ internal class RepositoryImpl(
         orderManagement.setTableNumber(tableNumber)
     }
 
+    override fun setOrderId(id: Int) {
+        val temp= id+1
+        orderManagement.setOrderID(temp)
+    }
 
+    override fun setTimeStamp(time: Timestamp) {
+        orderManagement.setTimeStamp(time)
+    }
 }

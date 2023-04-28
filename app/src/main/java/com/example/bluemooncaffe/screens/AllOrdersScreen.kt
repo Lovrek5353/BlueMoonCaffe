@@ -15,14 +15,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.bluemooncaffe.composables.OrderCard
-import com.example.bluemooncaffe.data.Order
-import com.example.bluemooncaffe.navigation.ScreenTab
 import com.example.bluemooncaffe.viewModels.OrdersViewModel
 import org.koin.androidx.compose.get
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun MyOrdersScreen(
+fun AllOrdersScreen(
     navController: NavController,
     viewModel: OrdersViewModel
 ){
@@ -47,6 +45,6 @@ fun MyOrdersScreen(
 /*
 @Preview
 @Composable
-fun MyOrdersScreenPreview(){
-    MyOrdersScreen()
+fun AllOrdersScreenPreview(){
+    AllOrdersScreen()
 }*/
