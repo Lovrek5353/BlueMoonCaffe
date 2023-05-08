@@ -4,6 +4,7 @@ import com.google.firebase.Timestamp
 
 class OrderManagement {
     var order = Order()
+    var staffOrders= mutableListOf<Order>()
 
     fun fetchOrder(): Order{
         return order

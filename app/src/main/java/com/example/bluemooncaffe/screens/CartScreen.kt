@@ -1,6 +1,7 @@
 package com.example.bluemooncaffe.screens
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
@@ -45,6 +46,7 @@ fun CartScreen(
 
 
     LaunchedEffect(Unit) {
+        Log.d("Trigger", "Okinuo se neki kurac")
         viewModel.getOrder().collect {
             order = it
             total = totalPrice(order.products)
@@ -129,7 +131,9 @@ fun CartScreen(
                             viewModel.setOrderTimeStamp(Timestamp.now())
                             order.totalPrice=total
                             viewModel.setOrderId(orderId)
-                            viewModel.addOrder(order) },
+                            viewModel.addOrder(order)
+                            navController.navigate(Screen.OrderTrackScreen.route)
+                                  },
                     ) {
                         Text(text = stringResource(id = R.string.submit))
                     }

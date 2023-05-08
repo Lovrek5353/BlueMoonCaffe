@@ -84,5 +84,9 @@ dependencies {
     //for refreshing
     implementation 'com.google.accompanist:accompanist-swiperefresh:0.25.1'
 
+    //for authentication
+    implementation 'com.firebaseui:firebase-ui-auth:7.2.0'
+
+
 }
 apply plugin: 'com.google.gms.google-services'
