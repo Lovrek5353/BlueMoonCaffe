@@ -5,7 +5,7 @@ import com.google.firebase.Timestamp
 import java.util.*
 
 
-val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+val dateFormat = SimpleDateFormat("HH:mm:ss dd-MM-yyyy", Locale.getDefault())
 
 fun getDate(timestamp: Timestamp): String? {
         val formattedDate=dateFormat.format(timestamp.toDate())

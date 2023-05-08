@@ -27,6 +27,7 @@ import com.example.bluemooncaffe.viewModels.OrdersViewModel
 fun OrderCard(
     modifier: Modifier = Modifier,
     order: Order,
+    OnClick: () -> Unit={},
     viewModel: OrdersViewModel
 ){
     Card(
@@ -83,7 +84,7 @@ fun OrderCard(
             }
             item{
                 var time: String? = order.timestamp?.let { getDate(it) }
-                Text("Text: "+ time)
+                Text("Time: "+ time)
             }
             item {
                 Row(
@@ -112,28 +113,43 @@ fun OrderCard(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ){
-                    IconButton(onClick = { viewModel.assingToMe(order.id) }) {   //assign to me
+                    IconButton(onClick = {
+                        viewModel.assingToMe(order.id)
+                        OnClick()
+                    }) {   //assign to me
                         Icon(
                             imageVector = Icons.Default.AccountCircle,
                             contentDescription = "Assign to me"
                         )
                     }
-                    IconButton(onClick = { viewModel.changeToProcessing(order.id) }) {  //working on it
+                    IconButton(
+                        onClick = { viewModel.changeToProcessing(order.id)
+                                    OnClick()
+                        }) {  //working on it
                         Icon(
                             imageVector = Icons.Default.Build,
                             contentDescription = "Working on it")
                     }
-                    IconButton(onClick = { viewModel.changeToDelivered(order.id) }) {  //delivered
+                    IconButton(onClick = {
+                        viewModel.changeToDelivered(order.id)
+                        OnClick()
+                    }) {  //delivered
                         Icon(
                             imageVector = Icons.Default.ArrowForward,
                             contentDescription = "Delivered" )
                     }
-                    IconButton(onClick = { viewModel.changeToPaid(order.id)}) {          //paid
+                    IconButton(onClick = {
+                        viewModel.changeToPaid(order.id)
+                        OnClick()
+                    }) {          //paid
                         Icon(
                             imageVector = Icons.Default.ShoppingCart,
                             contentDescription = "Paid" )
                     }
-                    IconButton(onClick = { viewModel.changeToCompleted(order.id) }) {         //completed
+                    IconButton(onClick = {
+                        viewModel.changeToCompleted(order.id)
+                        OnClick()
+                    }) {         //completed
                         Icon(
                             imageVector = Icons.Default.Done,
                             contentDescription = "Completed")

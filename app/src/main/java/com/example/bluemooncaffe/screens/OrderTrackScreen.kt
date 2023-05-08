@@ -1,6 +1,7 @@
 package com.example.bluemooncaffe.screens
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -25,6 +26,7 @@ import com.example.bluemooncaffe.navigation.Screen
 import com.example.bluemooncaffe.viewModels.OrdersViewModel
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import kotlinx.coroutines.flow.collect
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -37,6 +39,9 @@ fun OrderTrackScreen(
     val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = false)
 
     LaunchedEffect(Unit) {
+        viewModel.getSingleOrder().collect(){
+            order=it
+        }
     }
 
     Scaffold(
@@ -65,16 +70,17 @@ fun OrderTrackScreen(
         }
     ) {
         SwipeRefresh(state = swipeRefreshState,
-            onRefresh = { TODO()
+            onRefresh = {
+                swipeRefreshState.isRefreshing=true
+                viewModel.getSingleOrder()
+                swipeRefreshState.isRefreshing=false
             }
         ) {
-            LazyColumn(
+            Column(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                item {
                     OrderTrack(order = order, viewModel = viewModel)
-                }
             }
         }
     }

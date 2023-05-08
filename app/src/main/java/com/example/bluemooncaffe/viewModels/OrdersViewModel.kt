@@ -10,6 +10,9 @@ class OrdersViewModel (var drinksRepository: Repository): ViewModel(){
         fun getAllOrders(): SharedFlow<List<Order>> {
             return drinksRepository.getAllOrders()
         }
+        fun getSingleOrder(): SharedFlow<Order>{
+            return drinksRepository.getSingleOrder()
+        }
         fun assingToMe(id: Int) {
             drinksRepository.assignToMe(id)
         }
