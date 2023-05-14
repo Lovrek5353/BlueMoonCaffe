@@ -53,5 +53,8 @@ fun Navigation(startRoute: String){
         composable(Screen.OrderTrackScreen.route){
             OrderTrackScreen(navController = navController, viewModel = OrdersViewModel(get()))
         }
+        composable(Screen.SignInScreen.route){
+            SignInScreen(navController = navController, viewModel = LoginViewModel(get()))
+        }
     }
 }

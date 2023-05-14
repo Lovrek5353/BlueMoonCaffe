@@ -4,12 +4,15 @@ import android.util.Log
 import com.example.bluemooncaffe.data.Order
 import com.example.bluemooncaffe.data.OrderManagement
 import com.example.bluemooncaffe.data.Product
+
 import com.google.firebase.Timestamp
+import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.MetadataChanges
 import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.auth.User
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
@@ -44,6 +47,8 @@ interface Repository {
     fun setTableNumber(tableNumber: Int)
     fun setOrderId(id: Int)
     fun setTimeStamp(time: Timestamp)
+
+    fun emailLogin(email: String, password: String): Flow<Result<AuthResult>>
 }
 
 internal class RepositoryImpl(
@@ -53,7 +58,7 @@ internal class RepositoryImpl(
 
     private val db = Firebase.firestore
     val storage = Firebase.storage.reference
-    private lateinit var auth: FirebaseAuth
+    private val auth= FirebaseAuth.getInstance()
 
     val allDrinksRef = db.collection("drinks")
     val allOrdersRef = db.collection("orders")
@@ -409,5 +414,19 @@ internal class RepositoryImpl(
 
     override fun setTimeStamp(time: Timestamp) {
         orderManagement.setTimeStamp(time)
+    }
+
+    override fun emailLogin(email: String, password: String): Flow<Result<AuthResult>> = callbackFlow {
+        auth.signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener{ task ->
+                if(task.isSuccessful){
+                    trySend(Result.success(task.result)).isSuccess
+                }
+                else{
+                    trySend(Result.failure(task.exception!!)).isSuccess
+                }
+                close()
+            }
+        awaitClose()
     }
 }
