@@ -30,7 +30,7 @@ class MainActivity : ComponentActivity() {
                     val connection by connectivityState()
                     var isConnected= connection == ConnectionState.Available
                     if(isConnected){
-                        Navigation(startRoute = Screen.StartScreen.route)
+                        Navigation(startRoute = Screen.LoginScreen.route)
                     }
                     else{
                         Navigation(startRoute = Screen.OfflineScreen.route)
