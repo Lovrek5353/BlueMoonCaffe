@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.bluemooncaffe.R
 import com.example.bluemooncaffe.composables.TableNumberTextField
+import com.example.bluemooncaffe.utils.AppSettings.ordersEnabled
 import com.example.bluemooncaffe.navigation.Screen
 import com.example.bluemooncaffe.viewModels.LoginViewModel
 
@@ -36,7 +37,7 @@ fun LoginScreen(
             verticalArrangement = Arrangement.Center
         ){
             item{
-                Image(painter = painterResource(id = R.drawable.fronticon),
+                Image(painter = painterResource(id = R.drawable.logo),
                     contentDescription = "Front Icon",
                     modifier = Modifier
                         .size(100.dp)
@@ -61,7 +62,12 @@ fun LoginScreen(
             }*/
             item{
                 Spacer(modifier = Modifier.height(10.dp))
-                Button(onClick = { navController.navigate(Screen.MainScreen.route) }) {
+                Button(
+                    onClick = {
+                        navController.navigate(Screen.MainScreen.route)
+                        ordersEnabled=false
+                    }
+                ) {
                     Text(text = "Proceed without ordering")
                 }
             }

@@ -31,6 +31,8 @@ interface Repository {
     fun getLatestOrderId(): SharedFlow<Int>
 
     fun getJuices(): SharedFlow<List<Product>>
+    fun getBeers(): SharedFlow<List<Product>>
+    fun getCoffees(): SharedFlow<List<Product>>
 
     fun addOrder(order: Order)
 
@@ -64,12 +66,17 @@ internal class RepositoryImpl(
     val allOrdersRef = db.collection("orders")
 
     val juicesRef = db.collection("products").whereEqualTo("categoryId", 100)
+    val beerRef=db.collection("products").whereEqualTo("categoryId", 101)
+    val coffeesRef=db.collection("products").whereEqualTo("categoryId", 102)
+
 
     val allDrinksPublisher = MutableSharedFlow<List<Product>>()
     val orderLocalPublisher = MutableSharedFlow<Order>()
     val ordersIdPublisher = MutableSharedFlow<Int>()
 
     val juicesPublisher = MutableSharedFlow<List<Product>>()
+    val beerPublisher = MutableSharedFlow<List<Product>>()
+    val coffeesPublisher = MutableSharedFlow<List<Product>>()
 
     private val allDrinksInitialFlow = callbackFlow<List<Product>> {
         val drinkList = mutableListOf<Product>()
@@ -149,6 +156,57 @@ internal class RepositoryImpl(
             registration.remove()
         }
     }
+        .shareIn(
+            flowScope,
+            SharingStarted.WhileSubscribed(),
+            replay = 1
+        )
+    private val beerInitialFlow = callbackFlow<List<Product>> {
+        val drinkList= mutableListOf<Product>()
+        val registration=beerRef.addSnapshotListener{result, exception ->
+            if(exception != null){
+                close(exception)
+            }
+            else{
+                for(document in result!!){
+                    val product= document.toObject<Product>()
+                    drinkList.add(product)
+                }
+                trySend(drinkList).isSuccess
+            }
+        }
+        awaitClose{
+            registration.remove()
+        }
+    }
+        .shareIn(
+            flowScope,
+            SharingStarted.WhileSubscribed(),
+            replay = 1
+        )
+    private val coffeesInitialFlow = callbackFlow<List<Product>> {
+        val drinkList= mutableListOf<Product>()
+        val registration=coffeesRef.addSnapshotListener{result, exception ->
+            if(exception != null){
+                close(exception)
+            }
+            else{
+                for(document in result!!){
+                    val product= document.toObject<Product>()
+                    drinkList.add(product)
+                }
+                trySend(drinkList).isSuccess
+            }
+        }
+        awaitClose{
+            registration.remove()
+        }
+    }
+        .shareIn(
+            flowScope,
+            SharingStarted.WhileSubscribed(),
+            replay = 1
+        )
 
     private val allDrinks = merge(
         allDrinksInitialFlow,
@@ -178,6 +236,25 @@ internal class RepositoryImpl(
             SharingStarted.WhileSubscribed(),
             replay = 1
         )
+    private val beers= merge(
+        beerPublisher,
+        beerInitialFlow
+    )
+        .shareIn(
+            flowScope,
+            SharingStarted.WhileSubscribed(),
+            replay = 1
+    )
+    private val coffees=merge(
+        coffeesInitialFlow,
+        coffeesPublisher
+    )
+        .shareIn(
+            flowScope,
+            SharingStarted.WhileSubscribed(),
+            replay = 1
+        )
+
     private val latestID = merge(
         ordersIdInitialFlow,
         ordersIdPublisher
@@ -291,7 +368,8 @@ internal class RepositoryImpl(
     }
 
     override fun getJuices(): SharedFlow<List<Product>> = juices
-
+    override fun getBeers(): SharedFlow<List<Product>> = beers
+    override fun getCoffees(): SharedFlow<List<Product>> = coffees
 
     override fun assignToMe(id: Int) {   //change to actual waiterId
         val updates = hashMapOf(

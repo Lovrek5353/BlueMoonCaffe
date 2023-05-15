@@ -18,6 +18,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
@@ -79,14 +80,15 @@ fun SignInScreen(
                 .fillMaxSize()
             //Modifier.fillMaxSize()
         ) {
-
+            Spacer(modifier = Modifier.height(50.dp))
             //Add some big icon or fix existing one
             Image(
-                painter = painterResource(id = R.drawable.fronticon),
+                painter = painterResource(id = R.drawable.logo),
                 contentDescription = "Front Icon",
                 modifier = Modifier
                     .size(100.dp)
             )
+            Spacer(modifier = Modifier.height(50.dp))
             //Username form
             OutlinedTextField(
                 value = usernameText,
@@ -162,10 +164,6 @@ fun SignInScreen(
                     }
                 }
             )
-            Spacer(modifier = Modifier.height(30.dp))
-            Button(onClick = { /*TODO*/ }) {
-
-            }
         }
     }
 
