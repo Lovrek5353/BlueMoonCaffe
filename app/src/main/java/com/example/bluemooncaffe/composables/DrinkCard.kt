@@ -16,6 +16,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import com.example.bluemooncaffe.R
+import com.example.bluemooncaffe.utils.AppSettings.ordersEnabled
 import com.example.bluemooncaffe.data.Product
 import com.example.bluemooncaffe.viewModels.MainViewModel
 
@@ -48,7 +49,9 @@ fun drinkCard(
                 contentScale = ContentScale.FillBounds
             )
         }
-        addToCartButton(drink = item, viewModel = viewModel)
+        if(ordersEnabled==true){
+            addToCartButton(drink = item, viewModel = viewModel)
+        }
         Column(modifier = Modifier
             .padding(top=100.dp, start=3.dp)
         ) {

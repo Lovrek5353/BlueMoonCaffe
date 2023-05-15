@@ -13,6 +13,7 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.navigation.NavController
 import com.example.bluemooncaffe.navigation.Screen
+import com.example.bluemooncaffe.utils.AppSettings.ordersEnabled
 import com.example.bluemooncaffe.viewModels.LoginViewModel
 
 @Composable
@@ -49,6 +50,7 @@ fun TableNumberTextField(
         trailingIcon = {
             IconButton(onClick =
             {
+                ordersEnabled=true
                 viewModel.setTableNumber(text.toInt())
                 navController.navigate(Screen.MainScreen.route)
             }
