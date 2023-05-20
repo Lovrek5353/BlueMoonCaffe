@@ -3,6 +3,7 @@ package com.example.bluemooncaffe.navigation
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import com.example.bluemooncaffe.screens.*
 import com.example.bluemooncaffe.viewModels.CartViewModel
@@ -10,6 +11,7 @@ import com.example.bluemooncaffe.viewModels.LoginViewModel
 import com.example.bluemooncaffe.viewModels.MainViewModel
 import com.example.bluemooncaffe.viewModels.OrdersViewModel
 import org.koin.androidx.compose.get
+import java.nio.file.WatchEvent.Modifier
 
 @Composable
 fun Navigation(startRoute: String){
@@ -33,7 +35,7 @@ fun Navigation(startRoute: String){
             LoginScreen(viewModel = LoginViewModel(get()), navController = navController)
         }
         composable(route= Screen.StartScreen.route){
-            StartScreen(navController = navController, viewModel = LoginViewModel(get()))
+            StartScreen(navController = navController)
         }
         composable(route=Screen.OrdersScreen.route){
             OrderScreen(navController =navController,
@@ -55,6 +57,10 @@ fun Navigation(startRoute: String){
         }
         composable(Screen.SignInScreen.route){
             SignInScreen(navController = navController, viewModel = LoginViewModel(get()))
+        }
+        composable(Screen.FavoriteScreen.route){
+            FavoriteScreen(navController = navController, modifier = androidx.compose.ui.Modifier, viewModel = MainViewModel(
+                get()) )
         }
     }
 }

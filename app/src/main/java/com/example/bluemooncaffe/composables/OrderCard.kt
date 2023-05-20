@@ -60,9 +60,36 @@ fun OrderCard(
                     )
                 }
             }
+            val itemsCountMap=order.products.groupingBy { it }.eachCount()
+            for((obj, count) in itemsCountMap){
+                item{
+                    Row(
+                        modifier=Modifier.fillMaxWidth()
+                    ){
+                        Text(
+                            text = obj.name,
+                            modifier = Modifier
+                                .padding(start = 15.dp)
+                                .weight(1.5f),
+                            textAlign = TextAlign.Start
+                        )
+                        Text(
+                            text = "X"+count,
+                            modifier = Modifier
+                                .padding(start = 15.dp)
+                                .weight(1.5f),
+                            textAlign = TextAlign.Center
+                        )
+                        Text(
+                            text =obj.price.toString() +" €",
+                            textAlign = TextAlign.End,
+                            modifier = Modifier.padding(end = 15.dp)
+                        )
+                    }
+                }
+            }
 
-
-            for(product in order.products){
+/*            for(product in order.products){
                 item {
                     Row(
                         modifier= Modifier.fillMaxWidth(),
@@ -81,7 +108,7 @@ fun OrderCard(
                         )
                     }
                 }
-            }
+            }*/
             item{
                 var time: String? = order.timestamp?.let { getDate(it) }
                 Text("Time: "+ time)

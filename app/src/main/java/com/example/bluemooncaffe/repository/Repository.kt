@@ -1,9 +1,8 @@
 package com.example.bluemooncaffe.repository
 
 import android.util.Log
-import com.example.bluemooncaffe.data.Order
-import com.example.bluemooncaffe.data.OrderManagement
-import com.example.bluemooncaffe.data.Product
+import com.example.bluemooncaffe.data.*
+import com.example.bluemooncaffe.database.ProductDao
 
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.AuthResult
@@ -51,10 +50,15 @@ interface Repository {
     fun setTimeStamp(time: Timestamp)
 
     fun emailLogin(email: String, password: String): Flow<Result<AuthResult>>
+
+    fun removeFromFavorite(item: Product)
+    fun addToFavorite(item: Product)
+    fun getFavoriteDrinks(): SharedFlow<List<Product>>
 }
 
 internal class RepositoryImpl(
-    private val orderManagement: OrderManagement
+    private val orderManagement: OrderManagement,
+    private val productDao: ProductDao
 ) : Repository {
     private val flowScope = CoroutineScope(Dispatchers.Default)
 
@@ -73,6 +77,7 @@ internal class RepositoryImpl(
     val allDrinksPublisher = MutableSharedFlow<List<Product>>()
     val orderLocalPublisher = MutableSharedFlow<Order>()
     val ordersIdPublisher = MutableSharedFlow<Int>()
+    val favoriteItemsPublisher = MutableSharedFlow<List<Product>>()
 
     val juicesPublisher = MutableSharedFlow<List<Product>>()
     val beerPublisher = MutableSharedFlow<List<Product>>()
@@ -139,6 +144,13 @@ internal class RepositoryImpl(
             replay = 1
         )
 
+    private val favoriteItemsInitialFlow =
+        flow{emit(productDao.getFavoriteDrinks().map{it.ToProduct()})}
+            .shareIn(
+                flowScope,
+                SharingStarted.WhileSubscribed(),
+                replay = 1
+            )
     private val juicesInitialFlow = callbackFlow<List<Product>> {
         val drinkList = mutableListOf<Product>()
         val registration = juicesRef.addSnapshotListener { result, exception ->
@@ -226,7 +238,15 @@ internal class RepositoryImpl(
             SharingStarted.WhileSubscribed(),
             replay = 1
         )
-
+    private val favoriteItems = merge(
+        favoriteItemsInitialFlow,
+        favoriteItemsPublisher
+    )
+        .shareIn(
+            flowScope,
+            SharingStarted.WhileSubscribed(),
+            replay = 1
+        )
     private val juices = merge(
         juicesInitialFlow,
         juicesPublisher
@@ -507,4 +527,14 @@ internal class RepositoryImpl(
             }
         awaitClose()
     }
+
+    override fun addToFavorite(item: Product) {
+        productDao.insertProduct(item.toProductEntity())
+    }
+
+    override fun removeFromFavorite(item: Product) {
+        productDao.removeProduct(item.id)
+    }
+
+    override fun getFavoriteDrinks(): SharedFlow<List<Product>> =favoriteItems
 }

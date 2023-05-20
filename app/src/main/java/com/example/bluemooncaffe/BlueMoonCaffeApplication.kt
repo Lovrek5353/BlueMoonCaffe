@@ -22,7 +22,8 @@ class BlueMoonCaffeApplication: Application() {
                 cartModule,
                 ordersModule,
                 loginModule,
-                orderManagementModule
+                orderManagementModule,
+                databaseModule
             )
         }
     }

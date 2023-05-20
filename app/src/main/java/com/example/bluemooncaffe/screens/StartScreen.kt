@@ -2,17 +2,18 @@ package com.example.bluemooncaffe.screens
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.bluemooncaffe.R
@@ -23,47 +24,62 @@ import com.example.bluemooncaffe.viewModels.LoginViewModel
 @Composable
 fun StartScreen(
     navController: NavController,
-    viewModel: LoginViewModel
 ){
     val scaffoldState: ScaffoldState = rememberScaffoldState()
     Scaffold(
         scaffoldState=scaffoldState,
         modifier = Modifier
-            .padding(10.dp),
-    ){
-        LazyColumn(
-            modifier= Modifier
-                .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ){
-            item{
-                Image(painter = painterResource(id = R.drawable.fronticon),
-                    contentDescription = "Front Icon",
+            .fillMaxSize(),
+        topBar = {
+            TopAppBar(
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                Row(
                     modifier = Modifier
-                        .size(100.dp)
-                )
-            }
-            item{
-                Text(
-                    text = "Welcome to the Bikini Bottom Caffe",
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(bottom = 50.dp)
-                )
-            }
-            item {
-                Button(onClick = { navController.navigate(Screen.LoginScreen.route) }) {
-                    Text(text = "Customer")
-                }
-            }
-            item{
-                Button(onClick = { navController.navigate(Screen.OrdersScreen.route) }) {
-                    Text(text = "Worker")
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Start
+                ) {
+                    IconButton(onClick = { navController.navigate(Screen.LoginScreen.route) }) {
+                        Icon(
+                            imageVector = Icons.Filled.ArrowBack,
+                            contentDescription = "Back to login screen"
+                        )
+                    }
                 }
             }
         }
+    ){
+        Column(
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .fillMaxSize()
+        ){
+            Image(
+                painter = painterResource(id = R.drawable.logo),
+                contentDescription = "Front Icon",
+                modifier = Modifier
+                    .size(100.dp)
+            )
+            Spacer(modifier = Modifier.height(30.dp))
+            Button(onClick = { navController.navigate(Screen.FavoriteScreen.route) }) {
+                Text(text = "Favorite items  ")
+            }
+            Spacer(modifier = Modifier.height(30.dp))
+            Button(onClick = { navController.navigate(Screen.MainScreen.route) }) {
+                Text("Menu items")
+            }
+            Spacer(modifier = Modifier.height(30.dp))
+            Button(onClick = { /*TODO*/ }) {
+                Text("Recommend a cocktail")
+
+            }
+        }
+
     }
 }
+
 
 /*
 @Preview

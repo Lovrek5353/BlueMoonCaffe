@@ -6,5 +6,6 @@ data class Product(
     var name: String = "",
     var price: Double = 0.0,
     var servingSize: Double = 0.0,
-    var imageLink: String=""
+    var imageLink: String="",
+    var isFavorite: Boolean=false
 )

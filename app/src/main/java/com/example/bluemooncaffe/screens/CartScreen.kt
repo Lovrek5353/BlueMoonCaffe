@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.bluemooncaffe.composables.cartItemsList
 import com.example.bluemooncaffe.data.Order
+import com.example.bluemooncaffe.data.priceModificator
 import com.example.bluemooncaffe.data.totalPrice
 import com.example.bluemooncaffe.navigation.Screen
 import com.example.bluemooncaffe.viewModels.CartViewModel
@@ -117,6 +118,7 @@ fun CartScreen(
                 }
                 item {
                     Spacer(modifier = Modifier.height(10.dp))
+                   //val price: Number=priceModificator(total)
                     Text(
                         text = stringResource(id = R.string.total) + ": " + total.toString() + " €",
                         fontWeight = FontWeight.Bold,
