@@ -2,7 +2,8 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
 }
-
+apply plugin: 'kotlin-android'
+apply plugin: "kotlin-kapt"
 android {
     namespace 'com.example.bluemooncaffe'
     compileSdk 33
@@ -89,6 +90,15 @@ dependencies {
 
     //Google Sing-In
     implementation 'com.google.android.gms:play-services-auth:19.2.0'
+
+    //Room database
+    kapt "androidx.room:room-compiler:$roomVersion"
+    annotationProcessor "android.arch.persistence.room:compiler:1.0.0"
+    implementation "androidx.room:room-runtime:$roomVersion"
+    annotationProcessor "androidx.room:room-compiler:$roomVersion"
+    implementation "androidx.room:room-ktx:$roomVersion"
+    testImplementation "androidx.room:room-testing:$roomVersion"
+
 
 
 }

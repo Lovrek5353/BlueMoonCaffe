@@ -49,8 +49,14 @@ fun drinkCard(
                 contentScale = ContentScale.FillBounds
             )
         }
-        if(ordersEnabled==true){
-            addToCartButton(drink = item, viewModel = viewModel)
+        Row (
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ){
+            if(ordersEnabled==true){
+                addToCartButton(drink = item, viewModel = viewModel)
+            }
+            FavoriteButton(item = item, viewModel = viewModel)
         }
         Column(modifier = Modifier
             .padding(top=100.dp, start=3.dp)

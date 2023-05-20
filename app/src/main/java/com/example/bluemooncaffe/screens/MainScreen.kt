@@ -60,7 +60,6 @@ fun MainScreen(
                             contentDescription = "Go to Cart")
                     }
                 }
-
             }
         },
         modifier = Modifier
@@ -91,6 +90,11 @@ fun MainScreen(
                         text ="Please go back and enter valid table number",
                         textAlign = TextAlign.Center
                     )
+                }
+            }
+            item {
+                Button(onClick = { navController.navigate(Screen.FavoriteScreen.route) }) {
+                    Text(text = "Favorite Items")
                 }
             }
             item{
