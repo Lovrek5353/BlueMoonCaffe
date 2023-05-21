@@ -83,6 +83,15 @@ fun OrderScreen(
                 }
 
             }
+        },
+        drawerGesturesEnabled = true,
+        drawerContent = {
+            Column() {
+                Text(text = "Primjer1")
+                Button(onClick = {viewModel.getUncompletedOrders()}) {
+                    Text("Uncompleted")
+                }
+            }
         }
     ) {
         SwipeRefresh(

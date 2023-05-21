@@ -62,5 +62,8 @@ fun Navigation(startRoute: String){
             FavoriteScreen(navController = navController, modifier = androidx.compose.ui.Modifier, viewModel = MainViewModel(
                 get()) )
         }
+        composable(Screen.CocktailScreen.route){
+            CocktailScreen(navController=navController, viewModel=MainViewModel(get()))
+        }
     }
 }

@@ -71,7 +71,7 @@ fun StartScreen(
                 Text("Menu items")
             }
             Spacer(modifier = Modifier.height(30.dp))
-            Button(onClick = { /*TODO*/ }) {
+            Button(onClick = { navController.navigate(Screen.CocktailScreen.route) }) {
                 Text("Recommend a cocktail")
 
             }

@@ -10,6 +10,9 @@ class OrdersViewModel (var drinksRepository: Repository): ViewModel(){
         fun getAllOrders(): SharedFlow<List<Order>> {
             return drinksRepository.getAllOrders()
         }
+        fun getUncompletedOrders(): SharedFlow<List<Order>>{
+            return drinksRepository.getUncompletedOrders()
+        }
         fun getSingleOrder(): SharedFlow<Order>{
             return drinksRepository.getSingleOrder()
         }

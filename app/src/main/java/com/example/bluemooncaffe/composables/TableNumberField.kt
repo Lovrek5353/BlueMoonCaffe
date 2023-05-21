@@ -52,7 +52,7 @@ fun TableNumberTextField(
             {
                 ordersEnabled=true
                 viewModel.setTableNumber(text.toInt())
-                navController.navigate(Screen.MainScreen.route)
+                navController.navigate(Screen.StartScreen.route)
             }
             ) {
                 Icon(

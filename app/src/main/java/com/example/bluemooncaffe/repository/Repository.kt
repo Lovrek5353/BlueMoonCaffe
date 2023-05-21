@@ -3,6 +3,7 @@ package com.example.bluemooncaffe.repository
 import android.util.Log
 import com.example.bluemooncaffe.data.*
 import com.example.bluemooncaffe.database.ProductDao
+import com.example.bluemooncaffe.network.CocktailAPI
 
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.AuthResult
@@ -54,11 +55,15 @@ interface Repository {
     fun removeFromFavorite(item: Product)
     fun addToFavorite(item: Product)
     fun getFavoriteDrinks(): SharedFlow<List<Product>>
+
+    fun getCocktail(): SharedFlow<List<Cocktail>>
+    fun getUncompletedOrders(): SharedFlow<List<Order>>
 }
 
 internal class RepositoryImpl(
     private val orderManagement: OrderManagement,
-    private val productDao: ProductDao
+    private val productDao: ProductDao,
+    private val cocktailAPI: CocktailAPI
 ) : Repository {
     private val flowScope = CoroutineScope(Dispatchers.Default)
 
@@ -68,6 +73,7 @@ internal class RepositoryImpl(
 
     val allDrinksRef = db.collection("drinks")
     val allOrdersRef = db.collection("orders")
+    val uncompletedOrdersRef=db.collection("orders").whereNotEqualTo("status",6)
 
     val juicesRef = db.collection("products").whereEqualTo("categoryId", 100)
     val beerRef=db.collection("products").whereEqualTo("categoryId", 101)
@@ -78,6 +84,7 @@ internal class RepositoryImpl(
     val orderLocalPublisher = MutableSharedFlow<Order>()
     val ordersIdPublisher = MutableSharedFlow<Int>()
     val favoriteItemsPublisher = MutableSharedFlow<List<Product>>()
+    val cocktailInitialPublisher= MutableSharedFlow<List<Cocktail>>()
 
     val juicesPublisher = MutableSharedFlow<List<Product>>()
     val beerPublisher = MutableSharedFlow<List<Product>>()
@@ -220,6 +227,16 @@ internal class RepositoryImpl(
             replay = 1
         )
 
+    private val cocktailInitialFlow =
+        flow{
+            emit(cocktailAPI.fetchRandomCocktail().initialObject.map{it.ToCocktail()})
+        }
+            .shareIn(
+                flowScope,
+                SharingStarted.WhileSubscribed(),
+                replay = 1
+            )
+
     private val allDrinks = merge(
         allDrinksInitialFlow,
         allDrinksPublisher
@@ -278,6 +295,15 @@ internal class RepositoryImpl(
     private val latestID = merge(
         ordersIdInitialFlow,
         ordersIdPublisher
+    )
+        .shareIn(
+            flowScope,
+            SharingStarted.WhileSubscribed(),
+            replay = 1
+        )
+    private val cocktail = merge(
+        cocktailInitialPublisher,
+        cocktailInitialFlow
     )
         .shareIn(
             flowScope,
@@ -537,4 +563,59 @@ internal class RepositoryImpl(
     }
 
     override fun getFavoriteDrinks(): SharedFlow<List<Product>> =favoriteItems
+
+    override fun getCocktail(): SharedFlow<List<Cocktail>> = cocktail
+    override fun getUncompletedOrders(): SharedFlow<List<Order>> {
+        val allOrdersPublisher = MutableSharedFlow<List<Order>>()
+        val orderList = mutableListOf<Order>()
+
+        val allOrdersInitialFlow = callbackFlow<List<Order>> {
+            val registration = uncompletedOrdersRef
+                .orderBy("timestamp", Query.Direction.ASCENDING)
+                .addSnapshotListener(MetadataChanges.INCLUDE) { result, exception ->
+                    if (exception != null) {
+                        close(exception)
+                    } else {
+                        for (change in result?.documentChanges!!) {
+                            val order = change.document.toObject(Order::class.java)
+
+                            when (change.type) {
+                                DocumentChange.Type.ADDED -> {
+                                    orderList.add(0, order)
+                                }
+                                DocumentChange.Type.MODIFIED -> {
+                                    val index = orderList.indexOfFirst { it.id == order.id }
+                                    orderList[index] = order
+                                }
+                                DocumentChange.Type.REMOVED -> {
+                                    val index = orderList.indexOfFirst { it.id == order.id }
+                                    orderList.removeAt(index)
+                                }
+                            }
+                        }
+                        trySend(orderList.toList()).isSuccess
+                    }
+                }
+            awaitClose {
+                registration.remove()
+            }
+        }
+            .shareIn(
+                flowScope,
+                SharingStarted.WhileSubscribed(),
+                replay = 1
+            )
+
+        val allOrders = merge(
+            allOrdersInitialFlow,
+            allOrdersPublisher
+        )
+            .shareIn(
+                flowScope,
+                SharingStarted.WhileSubscribed(),
+                replay = 1
+            )
+
+        return allOrders
+    }
 }
