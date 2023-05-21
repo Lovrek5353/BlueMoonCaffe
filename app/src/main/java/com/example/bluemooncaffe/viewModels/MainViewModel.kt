@@ -1,6 +1,7 @@
 package com.example.bluemooncaffe.viewModels
 
 import androidx.lifecycle.ViewModel
+import com.example.bluemooncaffe.data.Cocktail
 import com.example.bluemooncaffe.data.Product
 import com.example.bluemooncaffe.repository.Repository
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -37,5 +38,8 @@ class MainViewModel (var drinksRepository: Repository): ViewModel() {
     }
     fun getFavoriteItems(): SharedFlow<List<Product>>{
         return drinksRepository.getFavoriteDrinks()
+    }
+    fun getCocktail(): SharedFlow<List<Cocktail>>{
+        return drinksRepository.getCocktail()
     }
 }

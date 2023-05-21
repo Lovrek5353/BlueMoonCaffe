@@ -64,7 +64,7 @@ fun LoginScreen(
                 Spacer(modifier = Modifier.height(10.dp))
                 Button(
                     onClick = {
-                        navController.navigate(Screen.MainScreen.route)
+                        navController.navigate(Screen.StartScreen.route)
                         ordersEnabled=false
                     }
                 ) {

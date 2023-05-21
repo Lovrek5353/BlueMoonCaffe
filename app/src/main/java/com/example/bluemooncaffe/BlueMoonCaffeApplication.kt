@@ -17,13 +17,15 @@ class BlueMoonCaffeApplication: Application() {
             androidContext(this@BlueMoonCaffeApplication)
             modules(
                 //firestoreModule,
+                apiModule,
                 repositoryModule,
                 mainModule,
                 cartModule,
                 ordersModule,
                 loginModule,
                 orderManagementModule,
-                databaseModule
+                databaseModule,
+                httpClientModule
             )
         }
     }

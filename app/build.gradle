@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'org.jetbrains.kotlin.plugin.serialization' version '1.6.0'
 }
 apply plugin: 'kotlin-android'
 apply plugin: "kotlin-kapt"
@@ -98,6 +99,13 @@ dependencies {
     annotationProcessor "androidx.room:room-compiler:$roomVersion"
     implementation "androidx.room:room-ktx:$roomVersion"
     testImplementation "androidx.room:room-testing:$roomVersion"
+
+    //Ktor
+    implementation "io.ktor:ktor-client-cio:$ktor_version"
+    implementation "io.ktor:ktor-client-core:$ktor_version"
+    implementation "io.ktor:ktor-client-android:$ktor_version"
+    implementation "io.ktor:ktor-client-serialization:$ktor_version"
+    implementation "io.ktor:ktor-client-logging:$ktor_version"
 
 
 

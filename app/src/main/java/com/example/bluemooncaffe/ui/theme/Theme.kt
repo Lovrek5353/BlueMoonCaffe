@@ -1,18 +1,25 @@
 package com.example.bluemooncaffe.ui.theme
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 
+@SuppressLint("ConflictingOnColor")
 private val DarkColorPalette = darkColors(
-    primary = darkPrimary,
-    secondary = darkSecondary,
-    background = darkBackgroud,
-    error = darkError,
-    onPrimary = darkAccent,
-    onSecondary = darkSeparator
+    primary = primary,
+    secondary = secondary,
+    background = background,
+    error = error,
+    onPrimary = onPrimary,
+    onSecondary = onSecondary,
+    secondaryVariant = secondaryVariant,
+    primaryVariant = primaryVariant,
+    surface = surface,
+    onBackground = onBackground,
+    onSurface = onSurface
 )
 
 private val LightColorPalette = lightColors(

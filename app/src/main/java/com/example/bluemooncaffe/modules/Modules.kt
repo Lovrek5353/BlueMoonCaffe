@@ -4,6 +4,9 @@ import androidx.room.Room
 import com.example.bluemooncaffe.data.OrderManagement
 import com.example.bluemooncaffe.database.AppDatabase
 import com.example.bluemooncaffe.database.ProductDao
+import com.example.bluemooncaffe.network.CocktailAPI
+import com.example.bluemooncaffe.network.CocktailAPIImpl
+import com.example.bluemooncaffe.network.KtorClient
 import com.example.bluemooncaffe.repository.Repository
 import com.example.bluemooncaffe.repository.RepositoryImpl
 import com.example.bluemooncaffe.viewModels.CartViewModel
@@ -19,10 +22,20 @@ import org.koin.dsl.module
         FirebaseFirestore.getInstance()
     }
 }*/
-val repositoryModule= module{
-    single{ RepositoryImpl(orderManagement = get<OrderManagement>(), productDao = get<ProductDao>()) }
-    single <Repository> {RepositoryImpl(get(),get())}
+val repositoryModule = module {
+    single<Repository> {
+        RepositoryImpl(
+            orderManagement = get<OrderManagement>(),
+            productDao = get<ProductDao>(),
+            cocktailAPI = get<CocktailAPI>()
+        )
+    }
 }
+
+/*val repositoryModule= module{
+    single{ RepositoryImpl(orderManagement = get<OrderManagement>(), productDao = get<ProductDao>(), get()) }
+    single <Repository> {RepositoryImpl(get(),get(),get())}
+}*/
 val mainModule= module {
     viewModel{
         MainViewModel(drinksRepository = get())
@@ -62,4 +75,12 @@ val databaseModule = module {
         val database =get<AppDatabase>()
         database.productDao()
     }
+}
+val apiModule = module {
+    single<CocktailAPI>{
+        CocktailAPIImpl(get())
+    }
+}
+val httpClientModule = module {
+    single { KtorClient.httpClient }
 }

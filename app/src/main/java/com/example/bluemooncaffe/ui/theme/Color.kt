@@ -19,3 +19,16 @@ val darkButton=Color(0xFFFF4081)
 val darkHover=Color(0xFFFF80AB)
 val darkSelected=Color(0xFFFF4081)
 val darkError=Color(0xFFFF5252)
+
+
+val primary = Color(0xFF424242)
+val primaryVariant = Color(0xFF303030)
+val secondary = Color(0xFFFF4081)
+val secondaryVariant = Color(0xFFE91E63)
+val background = Color(0xFF303030)
+val surface = Color(0xFF424242)
+val onPrimary = Color.White
+val onSecondary = Color.White
+val onBackground = Color.White
+val onSurface = Color.White
+val error = Color(0xFFFF5722)
