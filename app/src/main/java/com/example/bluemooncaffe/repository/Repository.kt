@@ -8,6 +8,7 @@ import com.example.bluemooncaffe.network.CocktailAPI
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.MetadataChanges
@@ -15,6 +16,7 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.auth.User
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
+import com.google.firebase.firestore.local.ReferenceSet
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.CoroutineScope
@@ -57,7 +59,7 @@ interface Repository {
     fun getFavoriteDrinks(): SharedFlow<List<Product>>
 
     fun getCocktail(): SharedFlow<List<Cocktail>>
-    fun getUncompletedOrders(): SharedFlow<List<Order>>
+    fun getMultipleOrders(referenceTracker: Int): SharedFlow<List<Order>>
 }
 
 internal class RepositoryImpl(
@@ -565,12 +567,20 @@ internal class RepositoryImpl(
     override fun getFavoriteDrinks(): SharedFlow<List<Product>> =favoriteItems
 
     override fun getCocktail(): SharedFlow<List<Cocktail>> = cocktail
-    override fun getUncompletedOrders(): SharedFlow<List<Order>> {
+    override fun getMultipleOrders(referenceTracker: Int): SharedFlow<List<Order>> {
         val allOrdersPublisher = MutableSharedFlow<List<Order>>()
         val orderList = mutableListOf<Order>()
+        var reference: Query = db.collection("orders").whereEqualTo("status",1)
+
+        if(referenceTracker==1){
+            reference=db.collection("orders").whereNotEqualTo("status",6)
+        }
+        if(referenceTracker==2){
+            reference=db.collection("orders").whereNotEqualTo("status",2)
+        }
 
         val allOrdersInitialFlow = callbackFlow<List<Order>> {
-            val registration = uncompletedOrdersRef
+            val registration = reference
                 .orderBy("timestamp", Query.Direction.ASCENDING)
                 .addSnapshotListener(MetadataChanges.INCLUDE) { result, exception ->
                     if (exception != null) {

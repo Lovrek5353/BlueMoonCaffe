@@ -41,7 +41,7 @@ fun FavoriteScreen(
                         .fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    IconButton(onClick = { navController.navigate(Screen.LoginScreen.route) }) {
+                    IconButton(onClick = { navController.navigate(Screen.StartScreen.route) }) {
                         Icon(
                             imageVector = Icons.Filled.ArrowBack,
                             contentDescription = "Back to login screen"

@@ -14,6 +14,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.bluemooncaffe.R
 import com.example.bluemooncaffe.data.Product
 import com.example.bluemooncaffe.data.drink1
+import com.example.bluemooncaffe.ui.theme.Coral
+import com.example.bluemooncaffe.ui.theme.Teal
 import com.example.bluemooncaffe.viewModels.MainViewModel
 
 @Composable
@@ -25,10 +27,10 @@ fun addToCartButton(
     IconButton(onClick = {viewModel.addDrink(drink)}
     ) {
         Icon(imageVector = Icons.Filled.Add,
-            tint = Color.Yellow,
+            tint = Coral,
             contentDescription = stringResource(id = R.string.addToCart),
             modifier= modifier
-                .background(color = Color.Blue,
+                .background(color = Teal,
                     shape = CircleShape
                 )
 

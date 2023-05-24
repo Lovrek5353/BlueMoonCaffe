@@ -59,7 +59,6 @@ fun CartScreen(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             TopAppBar(
-                backgroundColor = Color.Green,
                 modifier = Modifier
                     .fillMaxWidth()
             ) {

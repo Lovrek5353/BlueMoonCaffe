@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -16,6 +17,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
@@ -73,18 +77,19 @@ fun CocktailScreen(
                     modifier=Modifier.fillMaxSize()
                 ){
                     item{
-                        Text(text = t.name.toString())
+                        Text(
+                            text = t.name.toString(),
+                            fontWeight = FontWeight.Bold,
+                            textAlign = TextAlign.Center
+                        )
                         Spacer(modifier=Modifier.height(20.dp))
                     }
                     item{
-                        Text("Introduction: "+ (t?.intro))
-                    }
-                    item{
-                        Row{
-                            Text(text = "Ingridients")
+                        Column{
+                                Text(text = "Ingridients: ")
                             for(ing in t!!.ingridients){
                                 if(ing != null){
-                                    Text(ing.toString())
+                                        Text("- "+ing.toString()+", ")
                                 }
                             }
                         }
@@ -93,13 +98,17 @@ fun CocktailScreen(
                         Text(text = "Alcoholic: "+ t?.alkoholic)
                     }
                     item{
+                        Text("Instructions: "+ (t?.intro))
+                        Spacer(modifier=Modifier.height(20.dp))
+                    }
+                    item{
                         Log.d("Image", t.image.toString())
                         Image(
                             painter = rememberAsyncImagePainter(model = t.image.toString()),
                             contentDescription = stringResource(id = R.string.drinkImage),
                             modifier = Modifier
-                                .width(300.dp)
-                                .height(250.dp)
+                                .width(500.dp)
+                                .height(350.dp)
                         )
                     }
                 }
