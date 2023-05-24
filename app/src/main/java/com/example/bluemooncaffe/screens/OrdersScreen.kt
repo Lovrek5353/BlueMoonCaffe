@@ -71,8 +71,7 @@ fun OrderScreen(
                         textAlign = TextAlign.Center,
                         modifier = Modifier.fillMaxWidth(),
                     )
-                    IconButton(onClick = {
-                        navController.navigate(Screen.MyOrdersScreen.route)
+                    IconButton(onClick = { TODO()
                     }) {
                         Icon(
                             imageVector = Icons.Default.Refresh,
@@ -88,7 +87,7 @@ fun OrderScreen(
         drawerContent = {
             Column() {
                 Text(text = "Primjer1")
-                Button(onClick = {viewModel.getUncompletedOrders()}) {
+                Button(onClick = { TODO()}) {
                     Text("Uncompleted")
                 }
             }

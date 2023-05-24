@@ -28,15 +28,30 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colors.background
                 ) {
                     val connection by connectivityState()
-                    var isConnected= connection == ConnectionState.Available
-                    if(isConnected){
-                        Navigation(startRoute = Screen.LoginScreen.route)
-                    }
-                    else{
+                    var isConnected = connection == ConnectionState.Available
+                    if (isConnected) {
+                        if(isFirstTime()){
+                            Navigation(startRoute = Screen.TermsScreen.route)
+                        }
+                        else{
+                            Navigation(startRoute = Screen.LoginScreen.route)
+                        }
+                    } else {
                         Navigation(startRoute = Screen.OfflineScreen.route)
                     }
                 }
             }
         }
     }
-}
+        private fun isFirstTime(): Boolean{
+            var pref=applicationContext.getSharedPreferences("MyPref", MODE_PRIVATE)
+            var ranBefore: Boolean =pref.getBoolean("RanBefore", false)
+            if(!ranBefore){
+                // first time
+                val editor = pref.edit()
+                editor.putBoolean("RanBefore", true)
+                editor.commit()
+            }
+            return !ranBefore
+        }
+    }

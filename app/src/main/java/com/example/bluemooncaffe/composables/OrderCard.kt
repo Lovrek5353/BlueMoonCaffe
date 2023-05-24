@@ -32,7 +32,6 @@ fun OrderCard(
 ){
     Card(
         modifier = modifier.clip(RoundedCornerShape(30.dp)),
-        backgroundColor = Color.Red
     )
     {
         LazyColumn(

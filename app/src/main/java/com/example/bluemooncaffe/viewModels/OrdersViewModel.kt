@@ -3,6 +3,8 @@ package com.example.bluemooncaffe.viewModels
 import androidx.lifecycle.ViewModel
 import com.example.bluemooncaffe.data.Order
 import com.example.bluemooncaffe.repository.Repository
+import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.Query
 import kotlinx.coroutines.flow.SharedFlow
 
 
@@ -10,8 +12,8 @@ class OrdersViewModel (var drinksRepository: Repository): ViewModel(){
         fun getAllOrders(): SharedFlow<List<Order>> {
             return drinksRepository.getAllOrders()
         }
-        fun getUncompletedOrders(): SharedFlow<List<Order>>{
-            return drinksRepository.getUncompletedOrders()
+        fun getMultipleOrders(reference: Int): SharedFlow<List<Order>>{
+            return drinksRepository.getMultipleOrders(reference)
         }
         fun getSingleOrder(): SharedFlow<Order>{
             return drinksRepository.getSingleOrder()

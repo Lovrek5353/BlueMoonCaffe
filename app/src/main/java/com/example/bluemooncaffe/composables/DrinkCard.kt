@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -50,13 +51,21 @@ fun drinkCard(
             )
         }
         Row (
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(5.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ){
             if(ordersEnabled==true){
                 addToCartButton(drink = item, viewModel = viewModel)
             }
-            FavoriteButton(item = item, viewModel = viewModel)
+            FavoriteButton(
+                item = item,
+                viewModel = viewModel,
+                modifier = Modifier
+                    .size(30.dp)
+            )
         }
         Column(modifier = Modifier
             .padding(top=100.dp, start=3.dp)

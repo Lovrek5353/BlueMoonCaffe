@@ -7,12 +7,12 @@ sealed class Screen(val route: String){
     object OrdersScreen: Screen("orders")
     object StartScreen: Screen("start")
     object OfflineScreen: Screen("offline")
-    object AllOrdersScreen: Screen("allOrders")
-    object MyOrdersScreen: Screen("myOrders")
     object OrderTrackScreen: Screen("orderTrack")
     object SignInScreen: Screen("signIn")
     object FavoriteScreen: Screen("favorite")
     object CocktailScreen: Screen("cocktail")
+    object MyOrdersScren: Screen("myorders")
+    object TermsScreen: Screen("terms")
 }
 
 open class ScreenTab() {
