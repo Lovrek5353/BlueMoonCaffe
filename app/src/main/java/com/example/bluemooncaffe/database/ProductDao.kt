@@ -9,8 +9,10 @@ import androidx.room.Query
 interface ProductDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertProduct(item: ProductEntity)
+
     @Query("DELETE FROM products WHERE id=:id")
     fun removeProduct(id: Int)
+
     @Query("SELECT * FROM products")
     fun getFavoriteDrinks(): MutableList<ProductEntity>
 }

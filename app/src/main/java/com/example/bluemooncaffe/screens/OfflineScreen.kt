@@ -9,7 +9,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.semantics.Role.Companion.Image
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.bluemooncaffe.R
@@ -19,15 +18,16 @@ fun OfflineScreen(
     modifier: Modifier = Modifier
 ) {
     Column(
-        modifier=modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
-            painter = painterResource(id = R.drawable.no_wifi) , 
+            painter = painterResource(id = R.drawable.no_wifi),
             contentDescription = "No internet picture"
         )
-        Text(text = "No signal",
+        Text(
+            text = "No signal",
             textAlign = TextAlign.Center
         )
     }
@@ -35,6 +35,6 @@ fun OfflineScreen(
 
 @Preview
 @Composable
-fun OfflineScreenPreview(){
+fun OfflineScreenPreview() {
     OfflineScreen()
 }

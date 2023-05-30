@@ -1,4 +1,4 @@
-package com.example.bluemooncaffe.composables
+ package com.example.bluemooncaffe.composables
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -16,9 +16,9 @@ fun cartItemsList(
     refreshing: Boolean,
     OnIconClick: () -> Unit = {},
     items: List<Product>
-){
+) {
     Column {
-        for(item in items){
+        for (item in items) {
             CartItem(
                 item = item,
                 modifier = Modifier.padding(top = 5.dp, start = 5.dp, end = 5.dp),

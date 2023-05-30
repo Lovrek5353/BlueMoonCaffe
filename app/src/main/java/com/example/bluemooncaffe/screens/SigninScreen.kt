@@ -73,7 +73,6 @@ fun SignInScreen(
             mutableStateOf(0)
         }
         val loginResultState = remember { mutableStateOf<Result<AuthResult>?>(null) }
-        //var temp: Flow<com.example.bluemooncaffe.screens.Result<AuthResult>> = flowOf<com.example.bluemooncaffe.screens.Result<AuthResult>>()
         var temp: Flow<Int> = flowOf<Int>()
         Column(
             verticalArrangement = Arrangement.Top,

@@ -7,28 +7,34 @@ import com.example.bluemooncaffe.repository.Repository
 import com.google.firebase.Timestamp
 import kotlinx.coroutines.flow.SharedFlow
 
-class CartViewModel (var drinksRepository: Repository): ViewModel() {
-    fun getOrder(): SharedFlow<Order>{
+class CartViewModel(var drinksRepository: Repository) : ViewModel() {
+    fun getOrder(): SharedFlow<Order> {
         return drinksRepository.fetchOrder()
     }
-    fun removeDrink(drink: Product){
+
+    fun removeDrink(drink: Product) {
         drinksRepository.removeDrink(drink)
     }
-    fun setOrderId(id: Int){
+
+    fun setOrderId(id: Int) {
         drinksRepository.setOrderId(id)
     }
-    fun addOrder(order: Order){
-        order.status=1
-        order.waiterId=0
+
+    fun addOrder(order: Order) {
+        order.status = 1
+        order.waiterId = 0
         drinksRepository.addOrder(order)
     }
-    fun getOnlineOrder(): SharedFlow<Order>{
+
+    fun getOnlineOrder(): SharedFlow<Order> {
         return drinksRepository.getSingleOrder()
     }
-    fun getOrderId(): SharedFlow<Int>{
+
+    fun getOrderId(): SharedFlow<Int> {
         return drinksRepository.getLatestOrderId()
     }
-    fun setOrderTimeStamp(time: Timestamp){
+
+    fun setOrderTimeStamp(time: Timestamp) {
         drinksRepository.setTimeStamp(time)
     }
 }

@@ -17,8 +17,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import com.example.bluemooncaffe.R
-import com.example.bluemooncaffe.utils.AppSettings.ordersEnabled
 import com.example.bluemooncaffe.data.Product
+import com.example.bluemooncaffe.utils.AppSettings.ordersEnabled
 import com.example.bluemooncaffe.viewModels.MainViewModel
 
 @Composable
@@ -26,38 +26,38 @@ fun drinkCard(
     modifier: Modifier = Modifier,
     item: Product,
     viewModel: MainViewModel
-){
-    Box(modifier = modifier
-        .clip(RoundedCornerShape(dimensionResource(id = R.dimen.drinkCardRound)))
-        .size(
-            width = dimensionResource(id = R.dimen.drinkCardWidth),
-            height = dimensionResource(id = R.dimen.drinkCardHeight)
-        )
-    ){
-        if(item.imageLink!=""){
+) {
+    Box(
+        modifier = modifier
+            .clip(RoundedCornerShape(dimensionResource(id = R.dimen.drinkCardRound)))
+            .size(
+                width = dimensionResource(id = R.dimen.drinkCardWidth),
+                height = dimensionResource(id = R.dimen.drinkCardHeight)
+            )
+    ) {
+        if (item.imageLink != "") {
             Image(
                 painter = rememberAsyncImagePainter(model = item.imageLink),
                 contentDescription = stringResource(id = R.string.drinkImage),
-                modifier= Modifier.fillMaxSize(),
+                modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.FillBounds
             )
-        }
-        else{
+        } else {
             Image(
                 painter = painterResource(id = R.drawable.defaultdrink),
                 contentDescription = stringResource(id = R.string.drinkImage),
-                modifier= Modifier.fillMaxSize(),
+                modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.FillBounds
             )
         }
-        Row (
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(5.dp),
+                .padding(dimensionResource(id = R.dimen.padding5)),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
-        ){
-            if(ordersEnabled==true){
+        ) {
+            if (ordersEnabled == true) {
                 addToCartButton(drink = item, viewModel = viewModel)
             }
             FavoriteButton(
@@ -67,16 +67,19 @@ fun drinkCard(
                     .size(30.dp)
             )
         }
-        Column(modifier = Modifier
-            .padding(top=100.dp, start=3.dp)
+        Column(
+            modifier = Modifier
+                .padding(top = dimensionResource(id = R.dimen.padding100), start = dimensionResource(id = R.dimen.padding5))
         ) {
-            Text(text = item.name,
+            Text(
+                text = item.name,
                 fontWeight = FontWeight.Bold,
-                color= Color.Magenta
+                color = Color.Magenta
             )
-            Text(text = item.price.toString()+ " €",
+            Text(
+                text = item.price.toString() + " €",
                 fontWeight = FontWeight.Bold,
-                color= Color.Magenta
+                color = Color.Magenta
             )
         }
     }

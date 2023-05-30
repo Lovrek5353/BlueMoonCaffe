@@ -14,8 +14,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.bluemooncaffe.R
 import com.example.bluemooncaffe.composables.TableNumberTextField
-import com.example.bluemooncaffe.utils.AppSettings.ordersEnabled
 import com.example.bluemooncaffe.navigation.Screen
+import com.example.bluemooncaffe.utils.AppSettings.ordersEnabled
 import com.example.bluemooncaffe.viewModels.LoginViewModel
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -23,27 +23,28 @@ import com.example.bluemooncaffe.viewModels.LoginViewModel
 fun LoginScreen(
     viewModel: LoginViewModel,
     navController: NavController
-){
+) {
     val scaffoldState: ScaffoldState = rememberScaffoldState()
     Scaffold(
         scaffoldState = scaffoldState,
         modifier = Modifier.fillMaxSize()
-    ){
+    ) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
-        ){
-            item{
-                Image(painter = painterResource(id = R.drawable.logo),
+        ) {
+            item {
+                Image(
+                    painter = painterResource(id = R.drawable.logo),
                     contentDescription = "Front Icon",
                     modifier = Modifier
                         .size(100.dp)
                 )
             }
-            item{
+            item {
                 Spacer(modifier = Modifier.height(10.dp))
                 Text(
                     text = "Welcome to the Bikini Bottom Caffe",
@@ -52,28 +53,22 @@ fun LoginScreen(
                 )
             }
             item {
-                TableNumberTextField(navController,viewModel)
+                TableNumberTextField(navController, viewModel)
             }
-/*            item{
-                Spacer(modifier = Modifier.height(10.dp))
-                Button(onClick = { *//*TODO*//* }) {
-                    Text(text = "Enter")
-                }
-            }*/
-            item{
+            item {
                 Spacer(modifier = Modifier.height(10.dp))
                 Button(
                     onClick = {
                         navController.navigate(Screen.StartScreen.route)
-                        ordersEnabled=false
+                        ordersEnabled = false
                     }
                 ) {
                     Text(text = "Proceed without ordering")
                 }
             }
-            item{
+            item {
                 Spacer(modifier = Modifier.height(10.dp))
-                Button(onClick = {navController.navigate(Screen.SignInScreen.route)} ){
+                Button(onClick = { navController.navigate(Screen.SignInScreen.route) }) {
                     Text(text = "Staff")
                 }
             }

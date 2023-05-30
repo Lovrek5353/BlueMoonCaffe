@@ -5,4 +5,9 @@
     <dimen name="drinkCardHeight">180dp</dimen>
     <dimen name="cartItemWidth">180dp</dimen>
     <dimen name="cartItemHeight">50dp</dimen>
+    <dimen name="padding5">5dp</dimen>
+    <dimen name="padding100">100dp</dimen>
+    <dimen name="padding10">10dp</dimen>
+    <dimen name="padding15">15dp</dimen>
+    <dimen name="rounded30">30dp</dimen>
 </resources>
