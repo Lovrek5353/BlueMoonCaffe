@@ -10,6 +10,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.bluemooncaffe.R
@@ -31,17 +33,25 @@ fun StartScreen(
                     .fillMaxWidth()
             ) {
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Start
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Start,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    IconButton(onClick = { navController.navigate(Screen.LoginScreen.route) }) {
+                    IconButton(
+                        onClick = { navController.navigate(Screen.LoginScreen.route) },
+                        modifier = Modifier.align(Alignment.CenterVertically)
+                    ) {
                         Icon(
                             imageVector = Icons.Filled.ArrowBack,
                             contentDescription = "Back to login screen"
                         )
                     }
-                    Text(text = "Main menu")
+                    Text(
+                        text = "Main menu",
+                        textAlign = TextAlign.Center,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.fillMaxWidth()
+                    )
                 }
             }
         }
@@ -69,17 +79,9 @@ fun StartScreen(
             Spacer(modifier = Modifier.height(30.dp))
             Button(onClick = { navController.navigate(Screen.CocktailScreen.route) }) {
                 Text("Recommend a cocktail")
-
             }
         }
-
     }
 }
 
 
-/*
-@Preview
-@Composable
-fun StartScreenPreview(){
-    StartScreen()
-}*/

@@ -10,6 +10,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -30,7 +31,8 @@ fun MainScreen(
     val juices = viewModel.getJuicess().collectAsState(initial = listOf()).value
     val beers = viewModel.getBeers().collectAsState(initial = listOf()).value
     val coffees = viewModel.getCoffees().collectAsState(initial = listOf()).value
-    Log.d("Tag", "Jesmo li dobili sokice")
+    val shoots = viewModel.getShoots().collectAsState(initial = listOf()).value
+    val wine = viewModel.getWine().collectAsState(initial = listOf()).value
     val scaffoldState: ScaffoldState = rememberScaffoldState()
     Scaffold(
         scaffoldState = scaffoldState,
@@ -40,18 +42,26 @@ fun MainScreen(
                     .fillMaxWidth()
             ) {
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    IconButton(onClick = { navController.navigate(Screen.LoginScreen.route) }) {
+                    IconButton(
+                        onClick = { navController.navigate(Screen.StartScreen.route) }
+                    ) {
                         Icon(
                             imageVector = Icons.Filled.ArrowBack,
                             contentDescription = "Back to login screen"
                         )
                     }
+                    Text(
+                        text = "Main menu",
+                        textAlign = TextAlign.Center,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.weight(1f)
+                    )
                     IconButton(
-                        onClick = { navController.navigate(Screen.CartScreen.route) },
+                        onClick = { navController.navigate(Screen.CartScreen.route) }
                     ) {
                         Icon(
                             imageVector = Icons.Default.ShoppingCart,
@@ -113,7 +123,7 @@ fun MainScreen(
             item {
                 Spacer(modifier = Modifier.height(10.dp))
                 Text(
-                    text = "Coffees",
+                    text = "Coffee",
                     fontSize = 28.sp,
                     fontWeight = FontWeight.SemiBold,
                     modifier = Modifier
@@ -123,13 +133,32 @@ fun MainScreen(
             item {
                 drinksList(items = coffees, viewModel = viewModel)
             }
+            item {
+                Spacer(modifier = Modifier.height(10.dp))
+                Text(
+                    text = "Shoots",
+                    fontSize = 28.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier
+                        .padding(start = 10.dp)
+                )
+            }
+            item {
+                drinksList(items = shoots, viewModel = viewModel)
+            }
+            item {
+                Spacer(modifier = Modifier.height(10.dp))
+                Text(
+                    text = "Wine",
+                    fontSize = 28.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier
+                        .padding(start = 10.dp)
+                )
+            }
+            item {
+                drinksList(items = wine, viewModel = viewModel)
+            }
         }
     }
 }
-
-
-/*@Preview
-@Composable
-fun MainScreenPreview(){
-    MainScreen()
-}*/

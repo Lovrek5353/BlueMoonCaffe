@@ -41,7 +41,6 @@ fun Navigation(startRoute: String) {
             OrderScreen(
                 navController = navController,
                 viewModel = OrdersViewModel(get()),
-                mainScreenTab = ScreenTab.AllOrders
             )
         }
         composable(Screen.OfflineScreen.route) {

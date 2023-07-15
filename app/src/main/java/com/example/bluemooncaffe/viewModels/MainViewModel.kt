@@ -25,6 +25,12 @@ class MainViewModel(var drinksRepository: Repository) : ViewModel() {
     fun getCoffees(): SharedFlow<List<Product>> {
         return drinksRepository.getCoffees()
     }
+    fun getShoots(): SharedFlow<List<Product>>{
+        return drinksRepository.getShoots()
+    }
+    fun getWine(): SharedFlow<List<Product>>{
+        return drinksRepository.getWine()
+    }
 
     fun addDrink(drink: Product) {
         drinksRepository.addDrink(drink)

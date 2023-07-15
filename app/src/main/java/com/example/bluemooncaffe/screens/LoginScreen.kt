@@ -8,7 +8,10 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -17,6 +20,8 @@ import com.example.bluemooncaffe.composables.TableNumberTextField
 import com.example.bluemooncaffe.navigation.Screen
 import com.example.bluemooncaffe.utils.AppSettings.ordersEnabled
 import com.example.bluemooncaffe.viewModels.LoginViewModel
+import androidx.compose.ui.unit.sp
+
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -48,7 +53,12 @@ fun LoginScreen(
                 Spacer(modifier = Modifier.height(10.dp))
                 Text(
                     text = "Welcome to the Bikini Bottom Caffe",
-                    textAlign = TextAlign.Center,
+                    style = TextStyle(
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Center,
+                        color = Color.Black
+                    ),
                     modifier = Modifier.padding(bottom = 50.dp)
                 )
             }
@@ -75,13 +85,3 @@ fun LoginScreen(
         }
     }
 }
-
-
-/*
-
-@Preview
-@Composable
-fun LoginScreenPreview(){
-    LoginScreen()
-}
-*/

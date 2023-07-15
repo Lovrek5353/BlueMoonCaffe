@@ -11,8 +11,8 @@ class OrdersViewModel(var drinksRepository: Repository) : ViewModel() {
         return drinksRepository.getAllOrders()
     }
 
-    fun getMultipleOrders(reference: Int): SharedFlow<List<Order>> {
-        return drinksRepository.getMultipleOrders(reference)
+    fun getUncompletedOrders(): SharedFlow<List<Order>> {
+        return drinksRepository.getUncompletedOrders()
     }
 
     fun getSingleOrder(): SharedFlow<Order> {
@@ -37,5 +37,8 @@ class OrdersViewModel(var drinksRepository: Repository) : ViewModel() {
 
     fun changeToCompleted(id: Int) {
         drinksRepository.changeToCompleted(id)
+    }
+    fun resetOrder(){
+        drinksRepository.resetOrder()
     }
 }

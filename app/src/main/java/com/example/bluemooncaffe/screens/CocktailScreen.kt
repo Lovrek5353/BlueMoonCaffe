@@ -28,13 +28,15 @@ fun CocktailScreen(
     navController: NavController, viewModel: MainViewModel
 ) {
     val scaffoldState: ScaffoldState = rememberScaffoldState()
-    Scaffold(scaffoldState = scaffoldState, modifier = Modifier.fillMaxSize(), topBar = {
+    Scaffold(scaffoldState = scaffoldState,
+        modifier = Modifier.fillMaxSize(),
+        topBar = {
         TopAppBar(
             modifier = Modifier.fillMaxWidth()
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 IconButton(onClick = { navController.navigate(Screen.StartScreen.route) }) {
                     Icon(
@@ -54,12 +56,11 @@ fun CocktailScreen(
         }
     }) {
         val cocktail = viewModel.getCocktail().collectAsState(initial = null).value
-        Log.d("Cocktail", cocktail.toString())
-
         if (cocktail != null) {
             for (t in cocktail) {
                 LazyColumn(
                     modifier = Modifier.fillMaxSize()
+                        .padding(10.dp),
                 ) {
                     item {
                         Text(
@@ -83,7 +84,7 @@ fun CocktailScreen(
                         Text(text = "Alcoholic: " + t.alkoholic)
                     }
                     item {
-                        Text("Instructions: " + (t.intro))
+                        Text("Instructions: \n" + (t.intro))
                         Spacer(modifier = Modifier.height(20.dp))
                     }
                     item {
@@ -102,9 +103,3 @@ fun CocktailScreen(
     }
 }
 
-/*
-@Preview
-@Composable
-fun CocktailScreenPreview(){
-    CocktailScreen()
-}*/

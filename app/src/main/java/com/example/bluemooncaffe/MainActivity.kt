@@ -43,7 +43,6 @@ class MainActivity : ComponentActivity() {
         var pref = applicationContext.getSharedPreferences("MyPref", MODE_PRIVATE)
         var ranBefore: Boolean = pref.getBoolean("RanBefore", false)
         if (!ranBefore) {
-            // first time
             val editor = pref.edit()
             editor.putBoolean("RanBefore", true)
             editor.commit()

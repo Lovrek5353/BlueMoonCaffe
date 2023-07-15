@@ -58,9 +58,3 @@ fun TableNumberTextField(
     )
 }
 
-/*
-@Preview
-@Composable
-fun TableNumberTextFiledPreview(){
-    TableNumberTextField()
-}*/

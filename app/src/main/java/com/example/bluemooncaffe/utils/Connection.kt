@@ -18,9 +18,6 @@ sealed class ConnectionState {
     object Unavailable : ConnectionState()
 }
 
-/**
- * Network utility to get current state of internet connection
- */
 val Context.currentConnectivityState: ConnectionState
     get() {
         val connectivityManager =
@@ -39,9 +36,6 @@ private fun getCurrentConnectivityState(
     return if (connected) ConnectionState.Available else ConnectionState.Unavailable
 }
 
-/**
- * Network Utility to observe availability or unavailability of Internet connection
- */
 @ExperimentalCoroutinesApi
 fun Context.observeConnectivityAsFlow() = callbackFlow {
     val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -53,13 +47,10 @@ fun Context.observeConnectivityAsFlow() = callbackFlow {
 
     connectivityManager.registerNetworkCallback(networkRequest, callback)
 
-    // Set current state
     val currentState = getCurrentConnectivityState(connectivityManager)
     trySend(currentState)
 
-    // Remove callback when not used
     awaitClose {
-        // Remove listeners
         connectivityManager.unregisterNetworkCallback(callback)
     }
 }
@@ -81,9 +72,7 @@ fun NetworkCallback(callback: (ConnectionState) -> Unit): ConnectivityManager.Ne
 fun connectivityState(): State<ConnectionState> {
     val context = LocalContext.current
 
-    // Creates a State<ConnectionState> with current connectivity state as initial value
     return produceState(initialValue = context.currentConnectivityState) {
-        // In a coroutine, can make suspend calls
         context.observeConnectivityAsFlow().collect { value = it }
     }
 }

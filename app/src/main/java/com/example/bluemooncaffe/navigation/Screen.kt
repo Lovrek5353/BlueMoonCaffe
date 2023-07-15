@@ -14,8 +14,3 @@ sealed class Screen(val route: String) {
     object MyOrdersScren : Screen("myorders")
     object TermsScreen : Screen("terms")
 }
-
-open class ScreenTab {
-    object AllOrders : ScreenTab()
-    object MyOrders : ScreenTab()
-}

@@ -4,21 +4,15 @@ import android.util.Log
 import com.example.bluemooncaffe.data.*
 import com.example.bluemooncaffe.database.ProductDao
 import com.example.bluemooncaffe.network.CocktailAPI
-
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentChange
-import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.MetadataChanges
 import com.google.firebase.firestore.Query
-import com.google.firebase.firestore.auth.User
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
-import com.google.firebase.firestore.local.ReferenceSet
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
@@ -28,13 +22,14 @@ interface Repository {
     fun getAllProducts(): SharedFlow<List<Product>>
     fun getAllOrders(): SharedFlow<List<Order>>
 
-    fun getSingleOrder(): SharedFlow<Order>
-
     fun getLatestOrderId(): SharedFlow<Int>
+    fun getSingleOrder(): SharedFlow<Order>
 
     fun getJuices(): SharedFlow<List<Product>>
     fun getBeers(): SharedFlow<List<Product>>
     fun getCoffees(): SharedFlow<List<Product>>
+    fun getShoots(): SharedFlow<List<Product>>
+    fun getWine(): SharedFlow<List<Product>>
 
     fun addOrder(order: Order)
 
@@ -59,7 +54,7 @@ interface Repository {
     fun getFavoriteDrinks(): SharedFlow<List<Product>>
 
     fun getCocktail(): SharedFlow<List<Cocktail>>
-    fun getMultipleOrders(referenceTracker: Int): SharedFlow<List<Order>>
+    fun getUncompletedOrders(): SharedFlow<List<Order>>
 }
 
 internal class RepositoryImpl(
@@ -70,27 +65,31 @@ internal class RepositoryImpl(
     private val flowScope = CoroutineScope(Dispatchers.Default)
 
     private val db = Firebase.firestore
-    val storage = Firebase.storage.reference
-    private val auth= FirebaseAuth.getInstance()
+    private val auth = FirebaseAuth.getInstance()
 
     val allDrinksRef = db.collection("drinks")
     val allOrdersRef = db.collection("orders")
-    val uncompletedOrdersRef=db.collection("orders").whereNotEqualTo("status",6)
+    val uncompletedOrdersRef = db.collection("orders").whereNotEqualTo("status", 6)
 
     val juicesRef = db.collection("products").whereEqualTo("categoryId", 100)
-    val beerRef=db.collection("products").whereEqualTo("categoryId", 101)
-    val coffeesRef=db.collection("products").whereEqualTo("categoryId", 102)
+    val beerRef = db.collection("products").whereEqualTo("categoryId", 101)
+    val coffeesRef = db.collection("products").whereEqualTo("categoryId", 102)
+    val shootsRef = db.collection("products").whereEqualTo("categoryId", 103)
+    val wineRef = db.collection("products").whereEqualTo("categoryId", 104)
 
 
     val allDrinksPublisher = MutableSharedFlow<List<Product>>()
     val orderLocalPublisher = MutableSharedFlow<Order>()
     val ordersIdPublisher = MutableSharedFlow<Int>()
     val favoriteItemsPublisher = MutableSharedFlow<List<Product>>()
-    val cocktailInitialPublisher= MutableSharedFlow<List<Cocktail>>()
+    val cocktailInitialPublisher = MutableSharedFlow<List<Cocktail>>()
+
 
     val juicesPublisher = MutableSharedFlow<List<Product>>()
     val beerPublisher = MutableSharedFlow<List<Product>>()
     val coffeesPublisher = MutableSharedFlow<List<Product>>()
+    val shootsPublisher = MutableSharedFlow<List<Product>>()
+    val winePublisher = MutableSharedFlow<List<Product>>()
 
     private val allDrinksInitialFlow = callbackFlow<List<Product>> {
         val drinkList = mutableListOf<Product>()
@@ -126,7 +125,7 @@ internal class RepositoryImpl(
                 replay = 1
             )
     private val ordersIdInitialFlow = callbackFlow<Int> {
-        var latestId: Int = 0
+        var latestId=0
         val registration = allOrdersRef
             .orderBy("timestamp", Query.Direction.DESCENDING)
             .limit(1)
@@ -154,7 +153,7 @@ internal class RepositoryImpl(
         )
 
     private val favoriteItemsInitialFlow =
-        flow{emit(productDao.getFavoriteDrinks().map{it.ToProduct()})}
+        flow { emit(productDao.getFavoriteDrinks().map { it.ToProduct() }) }
             .shareIn(
                 flowScope,
                 SharingStarted.WhileSubscribed(),
@@ -183,20 +182,19 @@ internal class RepositoryImpl(
             replay = 1
         )
     private val beerInitialFlow = callbackFlow<List<Product>> {
-        val drinkList= mutableListOf<Product>()
-        val registration=beerRef.addSnapshotListener{result, exception ->
-            if(exception != null){
+        val drinkList = mutableListOf<Product>()
+        val registration = beerRef.addSnapshotListener { result, exception ->
+            if (exception != null) {
                 close(exception)
-            }
-            else{
-                for(document in result!!){
-                    val product= document.toObject<Product>()
+            } else {
+                for (document in result!!) {
+                    val product = document.toObject<Product>()
                     drinkList.add(product)
                 }
                 trySend(drinkList).isSuccess
             }
         }
-        awaitClose{
+        awaitClose {
             registration.remove()
         }
     }
@@ -206,20 +204,63 @@ internal class RepositoryImpl(
             replay = 1
         )
     private val coffeesInitialFlow = callbackFlow<List<Product>> {
-        val drinkList= mutableListOf<Product>()
-        val registration=coffeesRef.addSnapshotListener{result, exception ->
-            if(exception != null){
+        val drinkList = mutableListOf<Product>()
+        val registration = coffeesRef.addSnapshotListener { result, exception ->
+            if (exception != null) {
                 close(exception)
-            }
-            else{
-                for(document in result!!){
-                    val product= document.toObject<Product>()
+            } else {
+                for (document in result!!) {
+                    val product = document.toObject<Product>()
                     drinkList.add(product)
                 }
                 trySend(drinkList).isSuccess
             }
         }
-        awaitClose{
+        awaitClose {
+            registration.remove()
+        }
+    }
+        .shareIn(
+            flowScope,
+            SharingStarted.WhileSubscribed(),
+            replay = 1
+        )
+    private val shootsInitialFlow = callbackFlow<List<Product>> {
+        val drinkList = mutableListOf<Product>()
+        val registration = shootsRef.addSnapshotListener { result, exception ->
+            if (exception != null) {
+                close(exception)
+            } else {
+                for (document in result!!) {
+                    val product = document.toObject<Product>()
+                    drinkList.add(product)
+                }
+                trySend(drinkList).isSuccess
+            }
+        }
+        awaitClose {
+            registration.remove()
+        }
+    }
+        .shareIn(
+            flowScope,
+            SharingStarted.WhileSubscribed(),
+            replay = 1
+        )
+    private val wineInitialFlow = callbackFlow<List<Product>> {
+        val drinkList = mutableListOf<Product>()
+        val registration = wineRef.addSnapshotListener { result, exception ->
+            if (exception != null) {
+                close(exception)
+            } else {
+                for (document in result!!) {
+                    val product = document.toObject<Product>()
+                    drinkList.add(product)
+                }
+                trySend(drinkList).isSuccess
+            }
+        }
+        awaitClose {
             registration.remove()
         }
     }
@@ -230,8 +271,8 @@ internal class RepositoryImpl(
         )
 
     private val cocktailInitialFlow =
-        flow{
-            emit(cocktailAPI.fetchRandomCocktail().initialObject.map{it.ToCocktail()})
+        flow {
+            emit(cocktailAPI.fetchRandomCocktail().initialObject.map { it.ToCocktail() })
         }
             .shareIn(
                 flowScope,
@@ -275,7 +316,7 @@ internal class RepositoryImpl(
             SharingStarted.WhileSubscribed(),
             replay = 1
         )
-    private val beers= merge(
+    private val beers = merge(
         beerPublisher,
         beerInitialFlow
     )
@@ -283,10 +324,28 @@ internal class RepositoryImpl(
             flowScope,
             SharingStarted.WhileSubscribed(),
             replay = 1
-    )
-    private val coffees=merge(
+        )
+    private val coffees = merge(
         coffeesInitialFlow,
         coffeesPublisher
+    )
+        .shareIn(
+            flowScope,
+            SharingStarted.WhileSubscribed(),
+            replay = 1
+        )
+    private val shoots = merge(
+        shootsInitialFlow,
+        shootsPublisher,
+    )
+        .shareIn(
+            flowScope,
+            SharingStarted.WhileSubscribed(),
+            replay = 1
+        )
+    private val wine = merge(
+        winePublisher,
+        wineInitialFlow
     )
         .shareIn(
             flowScope,
@@ -377,58 +436,21 @@ internal class RepositoryImpl(
     }
 
 
-    override fun getSingleOrder(): SharedFlow<Order> {
-        val singleOrderPublisher = MutableSharedFlow<Order>()
-        val singleOrderInitialFlow = callbackFlow<Order> {
-            var order: Order = Order()
-            val registration = allOrdersRef
-                .orderBy("timestamp", Query.Direction.DESCENDING)
-                .limit(1)
-                .addSnapshotListener { result, exception ->
-                    if (exception != null) {
-                        close(exception)
-                    } else {
-                        for (document in result!!) {
-                            order = document.toObject(Order::class.java)
-                        }
-                        trySend(order).isSuccess
-                    }
-                }
-            awaitClose {
-                registration.remove()
-            }
-        }
-            .shareIn(
-                flowScope,
-                SharingStarted.WhileSubscribed(),
-                replay = 1
-            )
-        val singleOrder = merge(
-            singleOrderPublisher,
-            singleOrderInitialFlow
-        )
-            .shareIn(
-                flowScope,
-                SharingStarted.WhileSubscribed(),
-                replay = 1
-            )
-        return singleOrder
-    }
-
     override fun getJuices(): SharedFlow<List<Product>> = juices
     override fun getBeers(): SharedFlow<List<Product>> = beers
     override fun getCoffees(): SharedFlow<List<Product>> = coffees
+    override fun getShoots(): SharedFlow<List<Product>> = shoots
+    override fun getWine(): SharedFlow<List<Product>> = wine
 
     override fun assignToMe(id: Int) {   //change to actual waiterId
         val updates = hashMapOf(
             "waiterId" to 50,
             "status" to 2
         )
-        val tempref = allOrdersRef.document(id.toString())
         val query = allOrdersRef.whereEqualTo("id", id).limit(1)
         query.get().addOnCompleteListener { result ->
             if (result.isSuccessful) {
-                val snapshot = result.getResult()
+                val snapshot = result.result
                 for (documentSnapshot in snapshot!!.documents) {
                     val documentRef = documentSnapshot.reference
                     documentRef.update(updates as Map<String, Any>)
@@ -443,11 +465,10 @@ internal class RepositoryImpl(
         val updates = hashMapOf(
             "status" to 3
         )
-        val tempref = allOrdersRef.document(id.toString())
         val query = allOrdersRef.whereEqualTo("id", id).limit(1)
         query.get().addOnCompleteListener { result ->
             if (result.isSuccessful) {
-                val snapshot = result.getResult()
+                val snapshot = result.result
                 for (documentSnapshot in snapshot!!.documents) {
                     val documentRef = documentSnapshot.reference
                     documentRef.update(updates as Map<String, Any>)
@@ -462,11 +483,10 @@ internal class RepositoryImpl(
         val updates = hashMapOf(
             "status" to 4
         )
-        val tempref = allOrdersRef.document(id.toString())
         val query = allOrdersRef.whereEqualTo("id", id).limit(1)
         query.get().addOnCompleteListener { result ->
             if (result.isSuccessful) {
-                val snapshot = result.getResult()
+                val snapshot = result.result
                 for (documentSnapshot in snapshot!!.documents) {
                     val documentRef = documentSnapshot.reference
                     documentRef.update(updates as Map<String, Any>)
@@ -481,11 +501,10 @@ internal class RepositoryImpl(
         val updates = hashMapOf(
             "status" to 5
         )
-        val tempref = allOrdersRef.document(id.toString())
         val query = allOrdersRef.whereEqualTo("id", id).limit(1)
         query.get().addOnCompleteListener { result ->
             if (result.isSuccessful) {
-                val snapshot = result.getResult()
+                val snapshot = result.result
                 for (documentSnapshot in snapshot!!.documents) {
                     val documentRef = documentSnapshot.reference
                     documentRef.update(updates as Map<String, Any>)
@@ -500,11 +519,10 @@ internal class RepositoryImpl(
         val updates = hashMapOf(
             "status" to 6
         )
-        val tempref = allOrdersRef.document(id.toString())
         val query = allOrdersRef.whereEqualTo("id", id).limit(1)
         query.get().addOnCompleteListener { result ->
             if (result.isSuccessful) {
-                val snapshot = result.getResult()
+                val snapshot = result.result
                 for (documentSnapshot in snapshot!!.documents) {
                     val documentRef = documentSnapshot.reference
                     documentRef.update(updates as Map<String, Any>)
@@ -542,19 +560,19 @@ internal class RepositoryImpl(
         orderManagement.setTimeStamp(time)
     }
 
-    override fun emailLogin(email: String, password: String): Flow<Result<AuthResult>> = callbackFlow {
-        auth.signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener{ task ->
-                if(task.isSuccessful){
-                    trySend(Result.success(task.result)).isSuccess
+    override fun emailLogin(email: String, password: String): Flow<Result<AuthResult>> =
+        callbackFlow {
+            auth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        trySend(Result.success(task.result)).isSuccess
+                    } else {
+                        trySend(Result.failure(task.exception!!)).isSuccess
+                    }
+                    close()
                 }
-                else{
-                    trySend(Result.failure(task.exception!!)).isSuccess
-                }
-                close()
-            }
-        awaitClose()
-    }
+            awaitClose()
+        }
 
     override fun addToFavorite(item: Product) {
         productDao.insertProduct(item.toProductEntity())
@@ -564,23 +582,17 @@ internal class RepositoryImpl(
         productDao.removeProduct(item.id)
     }
 
-    override fun getFavoriteDrinks(): SharedFlow<List<Product>> =favoriteItems
+    override fun getFavoriteDrinks(): SharedFlow<List<Product>> = favoriteItems
 
     override fun getCocktail(): SharedFlow<List<Cocktail>> = cocktail
-    override fun getMultipleOrders(referenceTracker: Int): SharedFlow<List<Order>> {
+
+    override fun getUncompletedOrders(): SharedFlow<List<Order>> {
         val allOrdersPublisher = MutableSharedFlow<List<Order>>()
         val orderList = mutableListOf<Order>()
-        var reference: Query = db.collection("orders").whereEqualTo("status",1)
-
-        if(referenceTracker==1){
-            reference=db.collection("orders").whereNotEqualTo("status",6)
-        }
-        if(referenceTracker==2){
-            reference=db.collection("orders").whereNotEqualTo("status",2)
-        }
 
         val allOrdersInitialFlow = callbackFlow<List<Order>> {
-            val registration = reference
+            val registration = uncompletedOrdersRef
+                .orderBy("status", Query.Direction.ASCENDING)
                 .orderBy("timestamp", Query.Direction.ASCENDING)
                 .addSnapshotListener(MetadataChanges.INCLUDE) { result, exception ->
                     if (exception != null) {
@@ -625,7 +637,43 @@ internal class RepositoryImpl(
                 SharingStarted.WhileSubscribed(),
                 replay = 1
             )
-
         return allOrders
+    }
+    override fun getSingleOrder(): SharedFlow<Order> {
+        val singleOrderPublisher = MutableSharedFlow<Order>()
+        val singleOrderInitialFlow = callbackFlow<Order> {
+            var order = Order()
+            val registration = allOrdersRef
+                .orderBy("timestamp", Query.Direction.DESCENDING)
+                .limit(1)
+                .addSnapshotListener { result, exception ->
+                    if (exception != null) {
+                        close(exception)
+                    } else {
+                        for (document in result!!) {
+                            order = document.toObject(Order::class.java)
+                        }
+                        trySend(order).isSuccess
+                    }
+                }
+            awaitClose {
+                registration.remove()
+            }
+        }
+            .shareIn(
+                flowScope,
+                SharingStarted.WhileSubscribed(),
+                replay = 1
+            )
+        val singleOrder = merge(
+            singleOrderPublisher,
+            singleOrderInitialFlow
+        )
+            .shareIn(
+                flowScope,
+                SharingStarted.WhileSubscribed(),
+                replay = 1
+            )
+        return singleOrder
     }
 }

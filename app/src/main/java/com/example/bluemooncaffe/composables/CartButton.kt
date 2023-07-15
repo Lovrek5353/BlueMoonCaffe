@@ -35,11 +35,3 @@ fun addToCartButton(
         )
     }
 }
-
-
-/*
-@Preview
-@Composable
-fun addToCartButtonPreview(){
-    addToCartButton(drink = drink1)
-}*/

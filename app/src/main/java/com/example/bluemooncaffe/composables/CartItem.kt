@@ -82,10 +82,3 @@ fun CartItem(
         }
     }
 }
-
-/*
-@Preview
-@Composable
-fun CartItemPreview(){
-    CartItem(item= drink5)
-}*/

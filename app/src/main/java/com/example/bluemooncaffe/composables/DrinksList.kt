@@ -35,10 +35,3 @@ fun drinksList(
         }
     }
 }
-
-/*
-@Preview
-@Composable
-fun drinksListPreview(){
-    drinksList(items= drinks)
-}*/

@@ -12,6 +12,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -44,14 +45,18 @@ fun OrderTrackScreen(
         scaffoldState = scaffoldState,
         modifier = Modifier
             .fillMaxSize()
+            .padding(dimensionResource(id = R.dimen.padding10))
             .fillMaxWidth(),
         topBar = {
             TopAppBar(
-                backgroundColor = Color.Green,
                 modifier = Modifier
                     .fillMaxWidth()
             ) {
-                IconButton(onClick = { navController.navigate(Screen.MainScreen.route) }) {
+                IconButton(
+                    onClick = {
+                        navController.navigate(Screen.MainScreen.route)
+                        viewModel.resetOrder()
+                }) {
                     Icon(
                         imageVector = Icons.Filled.List,
                         contentDescription = stringResource(id = R.string.main_screen)

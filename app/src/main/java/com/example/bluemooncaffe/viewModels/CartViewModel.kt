@@ -26,10 +26,6 @@ class CartViewModel(var drinksRepository: Repository) : ViewModel() {
         drinksRepository.addOrder(order)
     }
 
-    fun getOnlineOrder(): SharedFlow<Order> {
-        return drinksRepository.getSingleOrder()
-    }
-
     fun getOrderId(): SharedFlow<Int> {
         return drinksRepository.getLatestOrderId()
     }

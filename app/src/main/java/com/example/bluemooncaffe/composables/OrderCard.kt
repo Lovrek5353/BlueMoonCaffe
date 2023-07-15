@@ -94,6 +94,9 @@ fun OrderCard(
                 var time: String? = order.timestamp?.let { getDate(it) }
                 Text(stringResource(id = R.string.time)+": "+ time)
             }
+            item{
+                Text(text = "Table: "+ order.tableNumber)
+            }
             item {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -173,11 +176,3 @@ fun OrderCard(
 
     }
 }
-
-/*
-@Preview
-@Composable
-fun OrderScreenOrder(){
-    OrderCard(order = order1)
-}
-*/

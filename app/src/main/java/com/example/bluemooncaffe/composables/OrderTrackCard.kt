@@ -29,8 +29,8 @@ fun OrderTrack(
     viewModel: OrdersViewModel
 ) {
     Card(
-        modifier = modifier.clip(RoundedCornerShape(dimensionResource(id = R.dimen.rounded30))),
-        backgroundColor = Color.Red
+        modifier = modifier
+            .clip(RoundedCornerShape(dimensionResource(id = R.dimen.rounded30))),
     )
     {
         LazyColumn(
@@ -39,7 +39,7 @@ fun OrderTrack(
             item {
                 Row {
                     Text(
-                        text = stringResource(id = R.string.order) + order.id.toString(),
+                        text = stringResource(id = R.string.order)+" " + order.id.toString(),
                         fontWeight = FontWeight.Bold,
                         fontSize = 20.sp,
                         modifier = Modifier
@@ -109,10 +109,3 @@ fun OrderTrack(
 
     }
 }
-
-/*
-@Preview
-@Composable
-fun OrderTrackPreview(){
-    OrderTrack(order= order1)
-}*/

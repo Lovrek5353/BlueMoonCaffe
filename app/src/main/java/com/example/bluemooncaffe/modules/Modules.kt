@@ -27,11 +27,6 @@ val repositoryModule = module {
         )
     }
 }
-
-/*val repositoryModule= module{
-    single{ RepositoryImpl(orderManagement = get<OrderManagement>(), productDao = get<ProductDao>(), get()) }
-    single <Repository> {RepositoryImpl(get(),get(),get())}
-}*/
 val mainModule= module {
     viewModel{
         MainViewModel(drinksRepository = get())

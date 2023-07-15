@@ -1,10 +1,19 @@
 package com.example.bluemooncaffe.screens
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavController
 import com.example.bluemooncaffe.navigation.Screen
 
@@ -13,12 +22,28 @@ import com.example.bluemooncaffe.navigation.Screen
 fun TermsScreen(
     navController: NavController
 ) {
+    var isChecked by remember { mutableStateOf(false) }
     val scaffoldState: ScaffoldState = rememberScaffoldState()
     Scaffold(
-        scaffoldState = scaffoldState
+        modifier=Modifier
+            .fillMaxSize(),
+        scaffoldState = scaffoldState,
+        topBar = {
+            TopAppBar(
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                Text(
+                    text = "Terms and conditions",
+                    textAlign = TextAlign.Center,
+                    fontWeight= FontWeight.Bold,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+        }
     ) {
         LazyColumn(
-            modifier = androidx.compose.ui.Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
         ) {
             item{
                 Text(
@@ -42,13 +67,27 @@ fun TermsScreen(
                             "\n" +
                             "Modification of Terms: The owners may modify these Terms and Conditions at any time.\n" +
                             "\n" +
-                            "Governing Law: These Terms and Conditions are governed by the laws of [jurisdiction].\n" +
+                            "Governing Law: These Terms and Conditions are governed by the laws of this jurisdiction.\n" +
                             "\n" +
-                            "Entire Agreement: These Terms and Conditions constitute the entire agreement between you and the owners."
+                            "Entire Agreement: These Terms and Conditions constitute the entire agreement between you and the owner."
                 )
             }
+            item{
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Start
+                ){
+                    Text(text = "Accept: ")
+                    Checkbox(checked = isChecked , onCheckedChange = {isChecked=it} )
+                }
+            }
             item {
-                Button(onClick = { navController.navigate(Screen.LoginScreen.route) }) {
+                Button(onClick =
+                {
+                    if(isChecked==true){
+                        navController.navigate(Screen.LoginScreen.route)
+                    }
+                }) {
                     Text(text = "Go to app")
                 }
             }

@@ -48,10 +48,3 @@ fun FavoriteButton(
         )
     }
 }
-
-/*
-@Preview
-@Composable
-fun FavoriteButtonPreview(){
-    FavoriteButton()
-}*/

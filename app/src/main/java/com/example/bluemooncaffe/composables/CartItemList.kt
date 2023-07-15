@@ -28,10 +28,3 @@ fun cartItemsList(
         }
     }
 }
-
-/*
-@Preview
-@Composable
-fun cartItemsListPreview(){
-    cartItemsList(items = drinks)
-}*/

@@ -45,7 +45,6 @@ fun CartScreen(
 
 
     LaunchedEffect(Unit) {
-        Log.d("Trigger", "Okinuo se neki kurac")
         viewModel.getOrder().collect {
             order = it
             total = totalPrice(order.products)
@@ -143,11 +142,3 @@ fun CartScreen(
         }
     }
 }
-
-/*
-@Preview
-@Composable
-fun CartScreenPreview() {
-    CartScreen()
-}
-*/

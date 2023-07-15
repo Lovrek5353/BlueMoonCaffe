@@ -8,12 +8,3 @@ fun totalPrice(items: List<Product>): Double {
     }
     return finalPrice
 }
-
-fun priceModificator(price: Double): Number {
-    val roundedPrice = String.format("%.2f", price)
-    return if (roundedPrice.endsWith(".00")) {
-        roundedPrice.toInt()
-    } else {
-        roundedPrice.toDouble()
-    }
-}
