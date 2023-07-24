@@ -17,11 +17,7 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
-/*val firestoreModule = module {
-    single<FirebaseFirestore> {
-        FirebaseFirestore.getInstance()
-    }
-}*/
+
 val repositoryModule = module {
     single<Repository> {
         RepositoryImpl(
@@ -31,11 +27,6 @@ val repositoryModule = module {
         )
     }
 }
-
-/*val repositoryModule= module{
-    single{ RepositoryImpl(orderManagement = get<OrderManagement>(), productDao = get<ProductDao>(), get()) }
-    single <Repository> {RepositoryImpl(get(),get(),get())}
-}*/
 val mainModule= module {
     viewModel{
         MainViewModel(drinksRepository = get())

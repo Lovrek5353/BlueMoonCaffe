@@ -8,4 +8,17 @@
     <string name="yourOrder">Your order</string>
     <string name="total">Total </string>
     <string name="submit">Submit order </string>
+    <string name="favoriteButton">Favorite button</string>
+    <string name="order">Order</string>
+    <string name="status">Status</string>
+    <string name="time">Time</string>
+    <string name="totalPrice">Total price</string>
+    <string name="assignToMe">Assign to me</string>
+    <string name="workingOnIt">Working on it</string>
+    <string name="delivered">Delivered</string>
+    <string name="paid">Paid</string>
+    <string name="Completed">Completed </string>
+    <string name="tableNumber">Table number</string>
+    <string name="enterTableNumber">Enter table number</string>
+
 </resources>

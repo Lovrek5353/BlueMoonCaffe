@@ -1,42 +1,31 @@
 package com.example.bluemooncaffe.screens
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.util.Log
-import android.widget.Space
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
-import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.modifier.modifierLocalConsumer
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.bluemooncaffe.R
 import com.example.bluemooncaffe.navigation.Screen
 import com.example.bluemooncaffe.viewModels.LoginViewModel
 import com.google.firebase.auth.AuthResult
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -56,6 +45,7 @@ fun SignInScreen(
                 Text(
                     text = "Please sign in into app",
                     textAlign = TextAlign.Center,
+                    fontWeight = FontWeight.Bold,
                     modifier = Modifier.fillMaxWidth()
                 )
             }
@@ -73,17 +63,13 @@ fun SignInScreen(
             mutableStateOf(0)
         }
         val loginResultState = remember { mutableStateOf<Result<AuthResult>?>(null) }
-        //var temp: Flow<com.example.bluemooncaffe.screens.Result<AuthResult>> = flowOf<com.example.bluemooncaffe.screens.Result<AuthResult>>()
-        var temp: Flow<Int> = flowOf<Int>()
         Column(
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxSize()
-            //Modifier.fillMaxSize()
         ) {
             Spacer(modifier = Modifier.height(50.dp))
-            //Add some big icon or fix existing one
             Image(
                 painter = painterResource(id = R.drawable.logo),
                 contentDescription = "Front Icon",
@@ -139,21 +125,20 @@ fun SignInScreen(
                         contentDescription = "PasswordIcon"
                     )
                 },
-                visualTransformation =PasswordVisualTransformation(),
+                visualTransformation = PasswordVisualTransformation(),
                 trailingIcon = {
                     IconButton(
                         onClick =
                         {
-                            coroutineScope.launch{
-                                val result = viewModel.emailLogin(usernameText, passwordText).first()
-                                loginResultState.value=result
-                                if(loginResultState.value?.isSuccess == true){
+                            coroutineScope.launch {
+                                val result =
+                                    viewModel.emailLogin(usernameText, passwordText).first()
+                                loginResultState.value = result
+                                if (loginResultState.value?.isSuccess == true) {
                                     Log.d("Login", "Uspješna prijava")
                                     navController.navigate(Screen.OrdersScreen.route)
-                                }
-                                else{
+                                } else {
                                     Log.d("Login", "Neuspješna prijava")
-                                    //Toast.makeText(LocalContext.current, "Login failed", Toast.LENGTH_SHORT).show()
                                 }
 
                             }
@@ -169,6 +154,5 @@ fun SignInScreen(
             )
         }
     }
-
 }
 

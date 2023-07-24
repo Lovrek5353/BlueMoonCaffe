@@ -4,31 +4,33 @@ import com.google.firebase.Timestamp
 
 class OrderManagement {
     var order = Order()
-    var staffOrders= mutableListOf<Order>()
+    var staffOrders = mutableListOf<Order>()
 
-    fun fetchOrder(): Order{
+    fun fetchOrder(): Order {
         return order
     }
 
-    fun addDrink(drink: Product){
+    fun addDrink(drink: Product) {
         order.products.add(drink)
     }
 
-    fun setOrderID(id: Int){
-        order.id=id
+    fun setOrderID(id: Int) {
+        order.id = id
     }
 
-    fun removeDrink(drink: Product){
+    fun removeDrink(drink: Product) {
         order.products.remove(drink)
     }
 
-    fun resetOrder(){
-        order= Order()
+    fun resetOrder() {
+        order = Order()
     }
-    fun setTableNumber(tableNumber: Int){
-        order.tableNumber=tableNumber
+
+    fun setTableNumber(tableNumber: Int) {
+        order.tableNumber = tableNumber
     }
-    fun setTimeStamp(time: Timestamp){
-        order.timestamp=time
+
+    fun setTimeStamp(time: Timestamp) {
+        order.timestamp = time
     }
 }

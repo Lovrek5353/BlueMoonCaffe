@@ -9,6 +9,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.runtime.*
+import com.example.bluemooncaffe.R
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.navigation.NavController
@@ -18,56 +20,41 @@ import com.example.bluemooncaffe.viewModels.LoginViewModel
 
 @Composable
 fun TableNumberTextField(
-    navController: NavController,
-    viewModel: LoginViewModel
-){
-    val coroutineScope= rememberCoroutineScope()
+    navController: NavController, viewModel: LoginViewModel
+) {
+    val coroutineScope = rememberCoroutineScope()
     var text by remember {
         mutableStateOf("")
     }
-    OutlinedTextField(
-        value = text ,
-        onValueChange = {
-            text=it
-        },
-        label = {
-            Text(text = "Table number")
-        },
-        placeholder = {
-            Text(text = "Enter table number ")
-        },
-        keyboardOptions = KeyboardOptions.Default.copy(
-            capitalization = KeyboardCapitalization.None,
-            autoCorrect = false,
-            keyboardType = KeyboardType.Number
-        ),
-        leadingIcon = {
+    OutlinedTextField(value = text, onValueChange = {
+        text = it
+    }, label = {
+        Text(text = stringResource(id = R.string.tableNumber))
+    }, placeholder = {
+        Text(text = stringResource(id = R.string.enterTableNumber))
+    }, keyboardOptions = KeyboardOptions.Default.copy(
+        capitalization = KeyboardCapitalization.None,
+        autoCorrect = false,
+        keyboardType = KeyboardType.Number
+    ), leadingIcon = {
+        Icon(
+            imageVector = Icons.Default.LocationOn,
+            contentDescription = "TableNumberLeadingIcon"
+        )
+    }, trailingIcon = {
+        IconButton(onClick = {
+            ordersEnabled = true
+            viewModel.setTableNumber(text.toInt())
+            navController.navigate(Screen.StartScreen.route)
+        }) {
             Icon(
-                imageVector = Icons.Default.LocationOn ,
-                contentDescription = "TableNumberLeadingIcon"
+                imageVector = Icons.Default.ArrowForward,
+                contentDescription = "TableNumberTrailingIcon"
             )
-        },
-        trailingIcon = {
-            IconButton(onClick =
-            {
-                ordersEnabled=true
-                viewModel.setTableNumber(text.toInt())
-                navController.navigate(Screen.StartScreen.route)
-            }
-            ) {
-                Icon(
-                    imageVector = Icons.Default.ArrowForward,
-                    contentDescription = "TableNumberTrailingIcon")
-            }
-
         }
+
+    }
 
     )
 }
 
-/*
-@Preview
-@Composable
-fun TableNumberTextFiledPreview(){
-    TableNumberTextField()
-}*/

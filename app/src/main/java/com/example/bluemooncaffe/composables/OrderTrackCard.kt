@@ -11,13 +11,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.bluemooncaffe.R
 import com.example.bluemooncaffe.data.Order
 import com.example.bluemooncaffe.data.getStatus
-import com.example.bluemooncaffe.viewModels.CartViewModel
 import com.example.bluemooncaffe.viewModels.OrdersViewModel
 
 @Composable
@@ -25,92 +27,85 @@ fun OrderTrack(
     modifier: Modifier = Modifier,
     order: Order,
     viewModel: OrdersViewModel
-){
+) {
     Card(
-        modifier = modifier.clip(RoundedCornerShape(30.dp)),
-        backgroundColor = Color.Red
+        modifier = modifier
+            .clip(RoundedCornerShape(dimensionResource(id = R.dimen.rounded30))),
     )
     {
         LazyColumn(
-            modifier = modifier.clip(RoundedCornerShape(30.dp))
+            modifier = modifier.clip(RoundedCornerShape(dimensionResource(id = R.dimen.rounded30)))
         ) {
             item {
                 Row {
                     Text(
-                        text = "Order: "+order.id.toString(),
+                        text = stringResource(id = R.string.order)+" " + order.id.toString(),
                         fontWeight = FontWeight.Bold,
-                        fontSize= 20.sp,
+                        fontSize = 20.sp,
                         modifier = Modifier
-                            .padding(start = 15.dp)
+                            .padding(start = dimensionResource(id = R.dimen.padding15))
                             .weight(1.5f),
                         textAlign = TextAlign.Start
                     )
                     Text(
-                        text = "Status: "+ getStatus(order.status),
+                        text = stringResource(id = R.string.status)+": " + getStatus(order.status),
                         fontWeight = FontWeight.Bold,
-                        fontSize= 20.sp,
+                        fontSize = 20.sp,
                         modifier = Modifier
-                            .padding(end = 15.dp)
+                            .padding(end = dimensionResource(id = R.dimen.padding15))
                     )
                 }
             }
-            for(product in order.products){
+            for (product in order.products) {
                 item {
                     Row(
-                        modifier= Modifier.fillMaxWidth(),
+                        modifier = Modifier.fillMaxWidth(),
                     ) {
                         Text(
                             text = product.name,
                             modifier = Modifier
-                                .padding(start = 15.dp)
+                                .padding(start = dimensionResource(id = R.dimen.padding15))
                                 .weight(1.5f),
                             textAlign = TextAlign.Start
                         )
                         Text(
-                            text = product.price.toString()+" €",
+                            text = product.price.toString() + " €",
                             textAlign = TextAlign.End,
-                            modifier = Modifier.padding(end = 15.dp)
+                            modifier = Modifier.padding(end = dimensionResource(id = R.dimen.padding15))
                         )
                     }
                 }
             }
             item {
                 Row(
-                    modifier= Modifier.fillMaxWidth(),
-                ){
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
                     Text(
-                        text = "Total price: ",
+                        text = stringResource(id = R.string.totalPrice),
                         textAlign = TextAlign.Start,
                         fontWeight = FontWeight.Bold,
-                        fontSize= 20.sp,
+                        fontSize = 20.sp,
                         modifier = Modifier
-                            .padding(start = 15.dp)
+                            .padding(start = dimensionResource(id = R.dimen.padding15))
                             .weight(1.5f),
                     )
                     Text(
-                        text = order.totalPrice.toString()+" €",
+                        text = order.totalPrice.toString() + " €",
                         textAlign = TextAlign.End,
                         fontWeight = FontWeight.Bold,
-                        fontSize= 20.sp,
-                        modifier = Modifier.padding(end = 15.dp)
+                        fontSize = 20.sp,
+                        modifier = Modifier.padding(end = dimensionResource(id = R.dimen.padding15))
                     )
                 }
             }
-            item{
+            item {
                 Text(
-                    text = "Status: "+ getStatus(order.status),
+                    text = stringResource(id = R.string.status)+": " + getStatus(order.status),
                     textAlign = TextAlign.Center,
-                    modifier= Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth()
                 )
             }
         }
 
     }
 }
-
-/*
-@Preview
-@Composable
-fun OrderTrackPreview(){
-    OrderTrack(order= order1)
-}*/

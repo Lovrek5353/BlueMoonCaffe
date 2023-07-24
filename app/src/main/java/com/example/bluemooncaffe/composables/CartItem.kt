@@ -19,68 +19,66 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.bluemooncaffe.R
 import com.example.bluemooncaffe.data.Product
 import com.example.bluemooncaffe.viewModels.CartViewModel
-import com.example.bluemooncaffe.R
 
 @Composable
 fun CartItem(
     modifier: Modifier = Modifier,
     item: Product,
-    onIconClick: () -> Unit= {},
+    onIconClick: () -> Unit = {},
     viewModel: CartViewModel
-){
-    Box(modifier = modifier
-        .fillMaxWidth()
-        .clip(
-            RoundedCornerShape(dimensionResource(id = R.dimen.drinkCardRound))
-        )
-        .size(
-            width = dimensionResource(id = R.dimen.cartItemWidth),
-            height = dimensionResource(id = R.dimen.cartItemHeight)
-        )
-        .background(color = Color.DarkGray)
-    ){
+) {
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .clip(
+                RoundedCornerShape(dimensionResource(id = R.dimen.drinkCardRound))
+            )
+            .size(
+                width = dimensionResource(id = R.dimen.cartItemWidth),
+                height = dimensionResource(id = R.dimen.cartItemHeight)
+            )
+            .background(color = Color.DarkGray)
+    ) {
         Row(
-            modifier= Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            Text(text = item.name,
-                modifier=modifier
+            Text(
+                text = item.name,
+                modifier = modifier
                     .width(100.dp)
                     .padding(start = 3.dp),
                 fontSize = 16.sp,
                 fontWeight = FontWeight.SemiBold,
                 color = Color.White
             )
-            Text(text = item.price.toString()+ " €",
+            Text(
+                text = item.price.toString() + " €",
                 fontSize = 16.sp,
                 fontWeight = FontWeight.SemiBold,
                 color = Color.White,
-                textAlign= TextAlign.Center,
+                textAlign = TextAlign.Center,
                 modifier = Modifier
                     .padding(start = 3.dp)
             )
-            IconButton(onClick = {
-                viewModel.removeDrink(item)
-                onIconClick()
-            },
+            IconButton(
+                onClick = {
+                    viewModel.removeDrink(item)
+                    onIconClick()
+                },
                 modifier = Modifier.fillMaxHeight()
             ) {
-                Icon(imageVector = Icons.Filled.Delete,
+                Icon(
+                    imageVector = Icons.Filled.Delete,
                     contentDescription = stringResource(id = R.string.removeItem),
                     tint = Color.White,
-                    modifier= Modifier
+                    modifier = Modifier
                 )
             }
         }
     }
 }
-
-/*
-@Preview
-@Composable
-fun CartItemPreview(){
-    CartItem(item= drink5)
-}*/

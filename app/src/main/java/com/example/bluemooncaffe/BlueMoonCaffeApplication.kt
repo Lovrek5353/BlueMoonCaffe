@@ -7,16 +7,14 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
 
-class BlueMoonCaffeApplication: Application() {
-    override fun onCreate(){
+class BlueMoonCaffeApplication : Application() {
+    override fun onCreate() {
         super.onCreate()
-        //FirebaseApp.initializeApp(this );
         startKoin {
             FirebaseFirestore.getInstance()
             androidLogger()
             androidContext(this@BlueMoonCaffeApplication)
             modules(
-                //firestoreModule,
                 apiModule,
                 repositoryModule,
                 mainModule,

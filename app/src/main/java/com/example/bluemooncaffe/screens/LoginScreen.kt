@@ -8,85 +8,80 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.bluemooncaffe.R
 import com.example.bluemooncaffe.composables.TableNumberTextField
-import com.example.bluemooncaffe.utils.AppSettings.ordersEnabled
 import com.example.bluemooncaffe.navigation.Screen
+import com.example.bluemooncaffe.utils.AppSettings.ordersEnabled
 import com.example.bluemooncaffe.viewModels.LoginViewModel
+import androidx.compose.ui.unit.sp
+
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun LoginScreen(
     viewModel: LoginViewModel,
     navController: NavController
-){
+) {
     val scaffoldState: ScaffoldState = rememberScaffoldState()
     Scaffold(
         scaffoldState = scaffoldState,
         modifier = Modifier.fillMaxSize()
-    ){
+    ) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
-        ){
-            item{
-                Image(painter = painterResource(id = R.drawable.logo),
+        ) {
+            item {
+                Image(
+                    painter = painterResource(id = R.drawable.logo),
                     contentDescription = "Front Icon",
                     modifier = Modifier
                         .size(100.dp)
                 )
             }
-            item{
+            item {
                 Spacer(modifier = Modifier.height(10.dp))
                 Text(
                     text = "Welcome to the Bikini Bottom Caffe",
-                    textAlign = TextAlign.Center,
+                    style = TextStyle(
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Center,
+                        color = Color.Black
+                    ),
                     modifier = Modifier.padding(bottom = 50.dp)
                 )
             }
             item {
-                TableNumberTextField(navController,viewModel)
+                TableNumberTextField(navController, viewModel)
             }
-/*            item{
-                Spacer(modifier = Modifier.height(10.dp))
-                Button(onClick = { *//*TODO*//* }) {
-                    Text(text = "Enter")
-                }
-            }*/
-            item{
+            item {
                 Spacer(modifier = Modifier.height(10.dp))
                 Button(
                     onClick = {
                         navController.navigate(Screen.StartScreen.route)
-                        ordersEnabled=false
+                        ordersEnabled = false
                     }
                 ) {
                     Text(text = "Proceed without ordering")
                 }
             }
-            item{
+            item {
                 Spacer(modifier = Modifier.height(10.dp))
-                Button(onClick = {navController.navigate(Screen.SignInScreen.route)} ){
+                Button(onClick = { navController.navigate(Screen.SignInScreen.route) }) {
                     Text(text = "Staff")
                 }
             }
         }
     }
 }
-
-
-/*
-
-@Preview
-@Composable
-fun LoginScreenPreview(){
-    LoginScreen()
-}
-*/

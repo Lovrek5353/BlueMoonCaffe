@@ -8,11 +8,9 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.List
 import androidx.compose.runtime.*
-import com.example.bluemooncaffe.R
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -20,9 +18,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.bluemooncaffe.R
 import com.example.bluemooncaffe.composables.cartItemsList
 import com.example.bluemooncaffe.data.Order
-import com.example.bluemooncaffe.data.priceModificator
 import com.example.bluemooncaffe.data.totalPrice
 import com.example.bluemooncaffe.navigation.Screen
 import com.example.bluemooncaffe.viewModels.CartViewModel
@@ -37,9 +35,9 @@ import com.google.firebase.Timestamp
 fun CartScreen(
     navController: NavController,
     viewModel: CartViewModel
-){
+) {
     val scaffoldState: ScaffoldState = rememberScaffoldState()
-    val orderId=viewModel.getOrderId().collectAsState(initial = 0).value
+    val orderId = viewModel.getOrderId().collectAsState(initial = 0).value
     var order by remember { mutableStateOf(Order()) }
     val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = false)
     var refreshing by remember { mutableStateOf(false) }
@@ -47,7 +45,6 @@ fun CartScreen(
 
 
     LaunchedEffect(Unit) {
-        Log.d("Trigger", "Okinuo se neki kurac")
         viewModel.getOrder().collect {
             order = it
             total = totalPrice(order.products)
@@ -63,7 +60,10 @@ fun CartScreen(
                     .fillMaxWidth()
             ) {
                 IconButton(onClick = { navController.navigate(Screen.MainScreen.route) }) {
-                    Icon(imageVector = Icons.Filled.List, contentDescription = stringResource(id = R.string.main_screen))
+                    Icon(
+                        imageVector = Icons.Filled.List,
+                        contentDescription = stringResource(id = R.string.main_screen)
+                    )
                 }
                 Text(
                     text = "Your cart",
@@ -103,13 +103,13 @@ fun CartScreen(
                     cartItemsList(
                         items = order.products,
                         viewModel = viewModel,
-                        OnIconClick= {
+                        OnIconClick = {
                             refreshing = true
                             viewModel.getOrder()
                             total = totalPrice(order.products)
-                            refreshing=false
+                            refreshing = false
                         },
-                        refreshing=refreshing,
+                        refreshing = refreshing,
                         modifier = Modifier
                             .fillMaxWidth()
                             .scale(2f)
@@ -117,7 +117,6 @@ fun CartScreen(
                 }
                 item {
                     Spacer(modifier = Modifier.height(10.dp))
-                   //val price: Number=priceModificator(total)
                     Text(
                         text = stringResource(id = R.string.total) + ": " + total.toString() + " €",
                         fontWeight = FontWeight.Bold,
@@ -130,11 +129,11 @@ fun CartScreen(
                     Button(
                         onClick = {
                             viewModel.setOrderTimeStamp(Timestamp.now())
-                            order.totalPrice=total
+                            order.totalPrice = total
                             viewModel.setOrderId(orderId)
                             viewModel.addOrder(order)
                             navController.navigate(Screen.OrderTrackScreen.route)
-                                  },
+                        },
                     ) {
                         Text(text = stringResource(id = R.string.submit))
                     }
@@ -143,11 +142,3 @@ fun CartScreen(
         }
     }
 }
-
-/*
-@Preview
-@Composable
-fun CartScreenPreview() {
-    CartScreen()
-}
-*/
